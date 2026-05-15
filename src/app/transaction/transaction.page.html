@@ -194,7 +194,7 @@
 
     <!-- Income Source Modal -->
     <ion-modal [isOpen]="isIncomeSourceModalOpen" (didDismiss)="isIncomeSourceModalOpen = false"
-        [initialBreakpoint]="0.5" [breakpoints]="[0, 0.5, 0.8, 1]" handle="true" class="selection-modal">
+        [initialBreakpoint]="0.6" [breakpoints]="[0, 0.6, 0.8, 1]" handle="true" class="selection-modal">
         <ng-template>
             <ion-content class="ion-padding">
                 <div class="modal-header">
@@ -202,6 +202,12 @@
                 </div>
                 <ion-searchbar placeholder="Search Source" (ionInput)="searchIncomeSource($event)" mode="md"
                     class="modal-searchbar"></ion-searchbar>
+
+                <ion-button expand="block" fill="clear" color="medium" class="add-new-income-source-btn">
+                    <ion-icon name="add-outline" slot="start"></ion-icon>
+                    Add New Income Source
+                </ion-button>
+
                 <ion-grid>
                     <ion-row>
                         <ion-col size="3" *ngFor="let source of filteredIncomeSources">
@@ -220,8 +226,8 @@
     </ion-modal>
 
     <!-- Expense Type Modal -->
-    <ion-modal [isOpen]="isExpenseTypeModalOpen" (didDismiss)="isExpenseTypeModalOpen = false" [initialBreakpoint]="0.5"
-        [breakpoints]="[0, 0.5, 0.8, 1]" handle="true" class="selection-modal">
+    <ion-modal [isOpen]="isExpenseTypeModalOpen" (didDismiss)="isExpenseTypeModalOpen = false" [initialBreakpoint]="0.6"
+        [breakpoints]="[0, 0.6, 0.8, 1]" handle="true" class="selection-modal">
         <ng-template>
             <ion-content class="ion-padding">
                 <div class="modal-header">
@@ -229,6 +235,12 @@
                 </div>
                 <ion-searchbar placeholder="Search Type" (ionInput)="searchExpenseType($event)" mode="md"
                     class="modal-searchbar"></ion-searchbar>
+
+                <ion-button expand="block" fill="clear" color="medium" class="add-new-expense-type-btn">
+                    <ion-icon name="add-outline" slot="start"></ion-icon>
+                    Add New Expense Type
+                </ion-button>
+
                 <ion-grid>
                     <ion-row>
                         <ion-col size="3" *ngFor="let type of filteredExpenseTypes">
@@ -247,8 +259,8 @@
     </ion-modal>
 
     <!-- From Wallet Modal -->
-    <ion-modal [isOpen]="isFromWalletModalOpen" (didDismiss)="isFromWalletModalOpen = false" [initialBreakpoint]="0.5"
-        [breakpoints]="[0, 0.5, 0.8, 1]" handle="true" class="selection-modal">
+    <ion-modal [isOpen]="isFromWalletModalOpen" (didDismiss)="isFromWalletModalOpen = false" [initialBreakpoint]="0.6"
+        [breakpoints]="[0, 0.6, 0.8, 1]" handle="true" class="selection-modal">
         <ng-template>
             <ion-content class="ion-padding">
                 <div class="modal-header">
@@ -256,6 +268,12 @@
                 </div>
                 <ion-searchbar placeholder="Search Wallet" (ionInput)="searchWallet($event)" mode="md"
                     class="modal-searchbar"></ion-searchbar>
+
+                <ion-button expand="block" fill="clear" color="medium" class="add-new-wallet-btn">
+                    <ion-icon name="add-outline" slot="start"></ion-icon>
+                    Add New Wallet
+                </ion-button>
+
                 <ion-grid>
                     <ion-row>
                         <ion-col size="3" *ngFor="let wallet of filteredWallets">

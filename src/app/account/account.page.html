@@ -29,7 +29,7 @@
             </ion-card-header>
         </ion-card>
 
-        <ion-card color="light" *ngIf="excludedBalance !== 0">
+        <ion-card color="medium" *ngIf="excludedBalance !== 0">
             <ion-card-header>
                 <ion-card-subtitle>Excluded Balance</ion-card-subtitle>
                 <ion-card-title>{{ excludedBalance | currency }}</ion-card-title>
@@ -38,17 +38,33 @@
     </div>
 
     <ion-list>
-        <ion-item *ngFor="let account of accounts">
-            <ion-icon [name]="account.icon" slot="start" color="primary"></ion-icon>
-            <ion-label>
-                <h2>{{ account.name }}</h2>
-                <div *ngIf="account.isExcluded">
-                    <ion-badge color="warning">Excluded</ion-badge>
-                </div>
-            </ion-label>
-            <ion-note slot="end" [color]="account.balance < 0 ? 'danger' : 'dark'">
-                {{ account.balance | currency }}
-            </ion-note>
-        </ion-item>
+        <ion-item-sliding *ngFor="let account of accounts">
+            <ion-item>
+                <ion-icon [name]="account.icon" slot="start" color="primary"></ion-icon>
+                <ion-label>
+                    <h2>{{ account.name }}</h2>
+                </ion-label>
+                <ion-note slot="end"
+                    [color]="account.balance < 0 ? 'danger' : (account.isExcluded ? 'medium' : 'primary')">
+                    {{ account.balance | currency }}
+                </ion-note>
+            </ion-item>
+
+            <ion-item-options side="end">
+                <ion-item-option *ngIf="!account.isExcluded" (click)="excludeAccount(account)" color="warning">
+                    <ion-icon name="eye-off" slot="icon-only"></ion-icon>
+                </ion-item-option>
+                <ion-item-option *ngIf="account.isExcluded" (click)="includeAccount(account)" color="warning">
+                    <ion-icon name="eye" slot="icon-only"></ion-icon>
+                </ion-item-option>
+                <ion-item-option (click)="editAccount(account)" color="primary">
+                    <ion-icon name="pencil" slot="icon-only"></ion-icon>
+                </ion-item-option>
+                <ion-item-option (click)="deleteAccount(account)" color="danger">
+                    <ion-icon name="trash" slot="icon-only"></ion-icon>
+                </ion-item-option>
+            </ion-item-options>
+
+        </ion-item-sliding>
     </ion-list>
 </ion-content>

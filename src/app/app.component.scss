@@ -7,13 +7,13 @@ ion-item {
   --padding-end: 16px;
   --border-radius: 8px;
   margin: 4px 8px;
-  
+
   &.selected {
     --background: var(--ion-color-primary-tint);
-    --color: var(--ion-color-primary);
-    
+    --color: var(--ion-color-light);
+
     ion-icon {
-      color: var(--ion-color-primary);
+      color: var(--ion-color-light);
     }
   }
 }
@@ -34,7 +34,7 @@ ion-note {
 .logout-item {
   margin-top: 10px;
   margin-bottom: 10px;
-  
+
   ion-label {
     font-weight: 600;
   }

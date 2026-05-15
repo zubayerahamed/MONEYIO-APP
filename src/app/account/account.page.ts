@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import {
-    IonBadge,
     IonButton,
     IonButtons,
     IonCard,
@@ -12,6 +11,9 @@ import {
     IonHeader,
     IonIcon,
     IonItem,
+    IonItemOption,
+    IonItemOptions,
+    IonItemSliding,
     IonLabel,
     IonList,
     IonMenuButton,
@@ -20,7 +22,7 @@ import {
     IonToolbar
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { add, businessOutline, cardOutline, cashOutline, eyeOffOutline, eyeOutline, helpCircleOutline, peopleOutline, walletOutline } from 'ionicons/icons';
+import { add, businessOutline, cardOutline, cashOutline, eye, eyeOff, eyeOffOutline, eyeOutline, helpCircleOutline, pencil, peopleOutline, trash, walletOutline } from 'ionicons/icons';
 
 interface Account {
     id: string;
@@ -52,8 +54,10 @@ interface Account {
         IonCardHeader,
         IonCardSubtitle,
         IonCardTitle,
-        IonBadge,
-        IonButton
+        IonButton,
+        IonItemSliding,
+        IonItemOptions,
+        IonItemOption
     ],
 })
 export class AccountPage implements OnInit {
@@ -70,7 +74,7 @@ export class AccountPage implements OnInit {
     excludedBalance: number = 0;
 
     constructor() {
-        addIcons({ add, walletOutline, eyeOffOutline, eyeOutline, cashOutline, businessOutline, cardOutline, peopleOutline, helpCircleOutline });
+        addIcons({ add, eyeOff, eye, pencil, trash, walletOutline, eyeOffOutline, eyeOutline, cashOutline, businessOutline, cardOutline, peopleOutline, helpCircleOutline });
     }
 
     ngOnInit() {
@@ -89,5 +93,21 @@ export class AccountPage implements OnInit {
 
     addAccount() {
         console.log('Add account');
+    }
+
+    excludeAccount(account: Account) {
+        console.log('Exclude account');
+    }
+
+    includeAccount(account: Account) {
+        console.log('Include account');
+    }
+
+    editAccount(account: Account) {
+        console.log('Edit account');
+    }
+
+    deleteAccount(account: Account) {
+        console.log('Delete account');
     }
 }
