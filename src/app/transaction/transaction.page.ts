@@ -20,10 +20,18 @@ import {
     IonGrid,
     IonRow,
     IonCol,
-    IonSearchbar
+    IonSearchbar,
+    IonList,
+    IonItem,
+    IonNote
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { addCircleOutline, arrowForwardOutline, briefcaseOutline, calendarOutline, cameraOutline, cardOutline, cartOutline, cashOutline, closeOutline, createOutline, walletOutline, chevronDownOutline, searchOutline } from 'ionicons/icons';
+import { addCircleOutline, arrowForwardOutline, briefcaseOutline, calendarOutline, cameraOutline, cardOutline, cartOutline, cashOutline, closeOutline, createOutline, walletOutline, chevronDownOutline, searchOutline, addOutline, listOutline } from 'ionicons/icons';
+
+interface SubExpense {
+    name: string;
+    amount: number | null;
+}
 
 @Component({
     selector: 'app-transaction',
@@ -52,7 +60,10 @@ import { addCircleOutline, arrowForwardOutline, briefcaseOutline, calendarOutlin
         IonGrid,
         IonRow,
         IonCol,
-        IonSearchbar
+        IonSearchbar,
+        IonList,
+        IonItem,
+        IonNote
     ],
 })
 export class TransactionPage implements OnInit {
@@ -65,12 +76,18 @@ export class TransactionPage implements OnInit {
     isExpenseTypeModalOpen = false;
     isFromWalletModalOpen = false;
     isToWalletModalOpen = false;
+    isSubExpenseModalOpen = false;
 
     // Mock data for selects
     incomeSources = ['Salary', 'Freelance', 'Investment', 'Gift', 'Other'];
     expenseTypes = ['Food', 'Transport', 'Rent', 'Shopping', 'Entertainment', 'Health', 'Other'];
     wallets = ['Cash', 'Bank Account', 'Credit Card', 'Savings'];
     
+    // Mock data for sub expenses
+    subExpenseOptions = ['Grocery', 'Fast Food', 'Fuel', 'Bus/Train', 'Cloths', 'Electronics', 'Cinema', 'Games', 'Medicine', 'Gym', 'Internet', 'Electricity', 'Water', 'Other'];
+    
+    subExpenses: SubExpense[] = [];
+
     filteredIncomeSources = [...this.incomeSources];
     filteredExpenseTypes = [...this.expenseTypes];
     filteredWallets = [...this.wallets];
@@ -91,8 +108,14 @@ export class TransactionPage implements OnInit {
             cameraOutline,
             closeOutline,
             chevronDownOutline,
-            searchOutline
+            searchOutline,
+            addOutline,
+            listOutline
         });
+        
+        // Initialize sub-expenses with null amounts
+        this.subExpenses = this.subExpenseOptions.map(name => ({ name, amount: null }));
+
         this.transactionForm = this.fb.group({
             date: [new Date().toISOString(), Validators.required],
             amount: ['', [Validators.required, Validators.min(0.01)]],
@@ -153,7 +176,8 @@ export class TransactionPage implements OnInit {
             console.log('Transaction Saved:', {
                 type: this.segmentValue,
                 ...this.transactionForm.value,
-                image: this.capturedImage
+                image: this.capturedImage,
+                subExpenses: this.activeSubExpenses
             });
             // Handle save logic
         }
@@ -164,7 +188,8 @@ export class TransactionPage implements OnInit {
             console.log('Transaction Continued:', {
                 type: this.segmentValue,
                 ...this.transactionForm.value,
-                image: this.capturedImage
+                image: this.capturedImage,
+                subExpenses: this.activeSubExpenses
             });
             // Handle continue logic (e.g., save and reset for next entry)
             this.transactionForm.reset({
@@ -172,6 +197,7 @@ export class TransactionPage implements OnInit {
                 amount: ''
             });
             this.capturedImage = null;
+            this.subExpenses.forEach(se => se.amount = null);
         }
     }
 
@@ -274,5 +300,21 @@ export class TransactionPage implements OnInit {
     selectToWallet(wallet: string) {
         this.transactionForm.patchValue({ toWallet: wallet });
         this.isToWalletModalOpen = false;
+    }
+
+    get activeSubExpenses() {
+        return this.subExpenses.filter(se => se.amount !== null && se.amount > 0);
+    }
+
+    get isExpenseTypeSelected(): boolean {
+        return !!this.transactionForm.get('expenseType')?.value;
+    }
+
+    openSubExpenseModal() {
+        this.isSubExpenseModalOpen = true;
+    }
+
+    closeSubExpenseModal() {
+        this.isSubExpenseModalOpen = false;
     }
 }

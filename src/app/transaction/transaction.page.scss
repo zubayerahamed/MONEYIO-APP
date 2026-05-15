@@ -5,10 +5,12 @@
     --box-shadow: 0 28px 48px rgba(0, 0, 0, 0.4);
 }
 
-.selection-modal {
+.selection-modal, .sub-expense-modal {
     --border-radius: 16px 16px 0 0;
     --box-shadow: 0 28px 48px rgba(0, 0, 0, 0.4);
-    
+}
+
+.selection-modal {
     .modal-header {
         padding: 8px 16px 8px;
         text-align: center;
@@ -32,6 +34,47 @@
 
     ion-content {
         --background: var(--ion-background-color);
+    }
+}
+
+.sub-expense-modal {
+    ion-header {
+        ion-toolbar {
+            --background: var(--ion-background-color);
+            --border-style: none;
+            padding: 8px 0;
+        }
+        
+        ion-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+    }
+
+    ion-item {
+        --padding-start: 16px;
+        --inner-padding-end: 16px;
+        margin-bottom: 8px;
+        --background: transparent;
+        
+        ion-label {
+            font-weight: 500;
+            color: var(--ion-color-dark);
+            margin-bottom: 4px;
+        }
+
+        ion-input {
+            --background: var(--ion-color-step-50, #f4f5f8);
+            --border-radius: 8px;
+            --padding-start: 12px;
+            --padding-end: 12px;
+            margin-top: 4px;
+            
+            ion-icon {
+                margin-right: 8px;
+                color: var(--ion-color-medium);
+            }
+        }
     }
 }
 
@@ -139,6 +182,79 @@
         flex-direction: column;
         gap: 16px;
         padding-top: 10px;
+    }
+
+    .sub-expense-section {
+        margin-top: 8px;
+        border-top: 1px dashed var(--ion-color-step-200);
+        padding-top: 16px;
+
+        .add-sub-expense-btn {
+            --padding-start: 0;
+            --padding-end: 0;
+            text-transform: none;
+            font-weight: 600;
+            height: 36px;
+            margin-bottom: 12px;
+        }
+
+        .active-sub-expenses-list {
+            background: var(--ion-color-step-50, #f4f5f8);
+            border-radius: 12px;
+            padding: 16px;
+            margin-top: 8px;
+
+            .sub-expense-summary-header {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                margin-bottom: 12px;
+                color: var(--ion-color-medium);
+                
+                ion-icon {
+                    font-size: 1.2rem;
+                }
+
+                ion-label {
+                    font-size: 0.9rem;
+                    font-weight: 600;
+                    text-transform: uppercase;
+                    letter-spacing: 0.05em;
+                }
+            }
+
+            .sub-expense-item-row {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                margin-bottom: 8px;
+                
+                &:last-child {
+                    margin-bottom: 0;
+                }
+
+                .se-name {
+                    font-size: 0.95rem;
+                    color: var(--ion-color-dark);
+                    font-weight: 500;
+                }
+
+                .se-dots {
+                    flex: 1;
+                    border-bottom: 1px dotted var(--ion-color-step-300);
+                    margin: 0 8px;
+                    position: relative;
+                    top: -4px;
+                }
+
+                .se-amount {
+                    font-family: monospace;
+                    font-weight: 600;
+                    color: var(--ion-color-danger);
+                    font-size: 0.95rem;
+                }
+            }
+        }
     }
 
     .input-group {

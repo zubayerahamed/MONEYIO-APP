@@ -124,18 +124,66 @@
                     Continue
                 </ion-button>
             </div>
+
+            <!-- Sub Expense Section (Expense only) -->
+            <div class="sub-expense-section" *ngIf="segmentValue === 'expense' && isExpenseTypeSelected">
+                <ion-button expand="block" fill="clear" color="medium" class="add-sub-expense-btn"
+                    (click)="openSubExpenseModal()">
+                    <ion-icon name="add-outline" slot="start"></ion-icon>
+                    Add Sub Expense
+                </ion-button>
+
+                <!-- Active Sub Expenses List -->
+                <div class="active-sub-expenses-list" *ngIf="activeSubExpenses.length > 0">
+                    <div class="sub-expense-summary-header">
+                        <ion-icon name="list-outline"></ion-icon>
+                        <ion-label>Sub Expenses</ion-label>
+                    </div>
+                    <div class="sub-expense-chip-container">
+                        <div class="sub-expense-item-row" *ngFor="let se of activeSubExpenses">
+                            <span class="se-name">{{ se.name }}</span>
+                            <span class="se-dots"></span>
+                            <span class="se-amount">{{ se.amount | number:'1.2-2' }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </form>
 
     <!-- Modals moved out of the form to avoid styling conflicts -->
-    
+
     <!-- Date Modal -->
     <ion-modal [isOpen]="isDateModalOpen" (didDismiss)="isDateModalOpen = false" class="date-modal">
         <ng-template>
-            <ion-datetime presentation="date" preferWheel="false"
-                [value]="transactionForm.get('date')?.value" [showDefaultButtons]="true"
-                (ionChange)="onDateChange($event)">
+            <ion-datetime presentation="date" preferWheel="false" [value]="transactionForm.get('date')?.value"
+                [showDefaultButtons]="true" (ionChange)="onDateChange($event)">
             </ion-datetime>
+        </ng-template>
+    </ion-modal>
+
+    <!-- Sub Expense Modal -->
+    <ion-modal [isOpen]="isSubExpenseModalOpen" (didDismiss)="isSubExpenseModalOpen = false" [initialBreakpoint]="0.75"
+        [breakpoints]="[0, 0.75, 1]" handle="true" class="sub-expense-modal">
+        <ng-template>
+            <ion-header>
+                <ion-toolbar>
+                    <ion-title>Add Sub Expenses</ion-title>
+                    <ion-buttons slot="end">
+                        <ion-button (click)="closeSubExpenseModal()">Done</ion-button>
+                    </ion-buttons>
+                </ion-toolbar>
+            </ion-header>
+            <ion-content class="ion-padding">
+                <ion-list lines="none">
+                    <ion-item *ngFor="let se of subExpenses">
+                        <ion-label position="stacked">{{ se.name }}</ion-label>
+                        <ion-input type="number" [(ngModel)]="se.amount" placeholder="0.00" inputmode="decimal">
+                            <ion-icon slot="start" name="cash-outline" size="small"></ion-icon>
+                        </ion-input>
+                    </ion-item>
+                </ion-list>
+            </ion-content>
         </ng-template>
     </ion-modal>
 
@@ -147,7 +195,8 @@
                 <div class="modal-header">
                     <h3>Select Income Source</h3>
                 </div>
-                <ion-searchbar placeholder="Search Source" (ionInput)="searchIncomeSource($event)" mode="md" class="modal-searchbar"></ion-searchbar>
+                <ion-searchbar placeholder="Search Source" (ionInput)="searchIncomeSource($event)" mode="md"
+                    class="modal-searchbar"></ion-searchbar>
                 <ion-grid>
                     <ion-row>
                         <ion-col size="3" *ngFor="let source of filteredIncomeSources">
@@ -166,14 +215,15 @@
     </ion-modal>
 
     <!-- Expense Type Modal -->
-    <ion-modal [isOpen]="isExpenseTypeModalOpen" (didDismiss)="isExpenseTypeModalOpen = false"
-        [initialBreakpoint]="0.5" [breakpoints]="[0, 0.5, 0.8, 1]" handle="true" class="selection-modal">
+    <ion-modal [isOpen]="isExpenseTypeModalOpen" (didDismiss)="isExpenseTypeModalOpen = false" [initialBreakpoint]="0.5"
+        [breakpoints]="[0, 0.5, 0.8, 1]" handle="true" class="selection-modal">
         <ng-template>
             <ion-content class="ion-padding">
                 <div class="modal-header">
                     <h3>Select Expense Type</h3>
                 </div>
-                <ion-searchbar placeholder="Search Type" (ionInput)="searchExpenseType($event)" mode="md" class="modal-searchbar"></ion-searchbar>
+                <ion-searchbar placeholder="Search Type" (ionInput)="searchExpenseType($event)" mode="md"
+                    class="modal-searchbar"></ion-searchbar>
                 <ion-grid>
                     <ion-row>
                         <ion-col size="3" *ngFor="let type of filteredExpenseTypes">
@@ -192,14 +242,15 @@
     </ion-modal>
 
     <!-- From Wallet Modal -->
-    <ion-modal [isOpen]="isFromWalletModalOpen" (didDismiss)="isFromWalletModalOpen = false"
-        [initialBreakpoint]="0.5" [breakpoints]="[0, 0.5, 0.8, 1]" handle="true" class="selection-modal">
+    <ion-modal [isOpen]="isFromWalletModalOpen" (didDismiss)="isFromWalletModalOpen = false" [initialBreakpoint]="0.5"
+        [breakpoints]="[0, 0.5, 0.8, 1]" handle="true" class="selection-modal">
         <ng-template>
             <ion-content class="ion-padding">
                 <div class="modal-header">
                     <h3>Select From Wallet</h3>
                 </div>
-                <ion-searchbar placeholder="Search Wallet" (ionInput)="searchWallet($event)" mode="md" class="modal-searchbar"></ion-searchbar>
+                <ion-searchbar placeholder="Search Wallet" (ionInput)="searchWallet($event)" mode="md"
+                    class="modal-searchbar"></ion-searchbar>
                 <ion-grid>
                     <ion-row>
                         <ion-col size="3" *ngFor="let wallet of filteredWallets">
@@ -218,14 +269,15 @@
     </ion-modal>
 
     <!-- To Wallet Modal -->
-    <ion-modal [isOpen]="isToWalletModalOpen" (didDismiss)="isToWalletModalOpen = false"
-        [initialBreakpoint]="0.5" [breakpoints]="[0, 0.5, 0.8, 1]" handle="true" class="selection-modal">
+    <ion-modal [isOpen]="isToWalletModalOpen" (didDismiss)="isToWalletModalOpen = false" [initialBreakpoint]="0.5"
+        [breakpoints]="[0, 0.5, 0.8, 1]" handle="true" class="selection-modal">
         <ng-template>
             <ion-content class="ion-padding">
                 <div class="modal-header">
                     <h3>Select To Wallet</h3>
                 </div>
-                <ion-searchbar placeholder="Search Wallet" (ionInput)="searchWallet($event)" mode="md" class="modal-searchbar"></ion-searchbar>
+                <ion-searchbar placeholder="Search Wallet" (ionInput)="searchWallet($event)" mode="md"
+                    class="modal-searchbar"></ion-searchbar>
                 <ion-grid>
                     <ion-row>
                         <ion-col size="3" *ngFor="let wallet of filteredWallets">
