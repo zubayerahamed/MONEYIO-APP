@@ -138,9 +138,13 @@
                     <div class="sub-expense-summary-header">
                         <ion-icon name="list-outline"></ion-icon>
                         <ion-label>Sub Expenses</ion-label>
+                        <ion-icon name="calculator-outline" style="margin-left: auto; cursor: pointer;"
+                            (click)="calculateTotal()"></ion-icon>
                     </div>
                     <div class="sub-expense-chip-container">
                         <div class="sub-expense-item-row" *ngFor="let se of activeSubExpenses">
+                            <ion-icon name="trash-outline" color="danger" class="ion-margin-end"
+                                style="cursor: pointer;" (click)="removeSubExpense(se)"></ion-icon>
                             <span class="se-name">{{ se.name }}</span>
                             <span class="se-dots"></span>
                             <span class="se-amount">{{ se.amount | number:'1.2-2' }}</span>
@@ -164,19 +168,20 @@
 
     <!-- Sub Expense Modal -->
     <ion-modal [isOpen]="isSubExpenseModalOpen" (didDismiss)="isSubExpenseModalOpen = false" [initialBreakpoint]="0.75"
-        [breakpoints]="[0, 0.75, 1]" handle="true" class="sub-expense-modal">
+        [breakpoints]="[0, 0.75, 1]" handle="true" class="sub-expense-modal selection-modal">
         <ng-template>
-            <ion-header>
-                <ion-toolbar>
-                    <ion-title>Add Sub Expenses</ion-title>
-                    <ion-buttons slot="end">
-                        <ion-button (click)="closeSubExpenseModal()">Done</ion-button>
-                    </ion-buttons>
-                </ion-toolbar>
-            </ion-header>
             <ion-content class="ion-padding">
+                <div class="modal-header">
+                    <h3>Add Sub Expenses</h3>
+                    <ion-buttons>
+                        <ion-button (click)="closeSubExpenseModal()" color="primary">Done</ion-button>
+                    </ion-buttons>
+                </div>
+                <ion-searchbar placeholder="Search Sub Expense" (ionInput)="searchSubExpense($event)" mode="md"
+                    class="modal-searchbar"></ion-searchbar>
+
                 <ion-list lines="none">
-                    <ion-item *ngFor="let se of subExpenses">
+                    <ion-item *ngFor="let se of filteredSubExpenses">
                         <ion-label position="stacked">{{ se.name }}</ion-label>
                         <ion-input type="number" [(ngModel)]="se.amount" placeholder="0.00" inputmode="decimal">
                             <ion-icon slot="start" name="cash-outline" size="small"></ion-icon>

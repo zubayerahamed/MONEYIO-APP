@@ -26,7 +26,7 @@ import {
     IonNote
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { addCircleOutline, arrowForwardOutline, briefcaseOutline, calendarOutline, cameraOutline, cardOutline, cartOutline, cashOutline, closeOutline, createOutline, walletOutline, chevronDownOutline, searchOutline, addOutline, listOutline } from 'ionicons/icons';
+import { calculatorOutline, addCircleOutline, arrowForwardOutline, briefcaseOutline, calendarOutline, cameraOutline, cardOutline, cartOutline, cashOutline, closeOutline, createOutline, walletOutline, chevronDownOutline, searchOutline, addOutline, listOutline, trashOutline } from 'ionicons/icons';
 
 interface SubExpense {
     name: string;
@@ -82,11 +82,12 @@ export class TransactionPage implements OnInit {
     incomeSources = ['Salary', 'Freelance', 'Investment', 'Gift', 'Other'];
     expenseTypes = ['Food', 'Transport', 'Rent', 'Shopping', 'Entertainment', 'Health', 'Other'];
     wallets = ['Cash', 'Bank Account', 'Credit Card', 'Savings'];
-    
+
     // Mock data for sub expenses
     subExpenseOptions = ['Grocery', 'Fast Food', 'Fuel', 'Bus/Train', 'Cloths', 'Electronics', 'Cinema', 'Games', 'Medicine', 'Gym', 'Internet', 'Electricity', 'Water', 'Other'];
-    
+
     subExpenses: SubExpense[] = [];
+    filteredSubExpenses: SubExpense[] = [];
 
     filteredIncomeSources = [...this.incomeSources];
     filteredExpenseTypes = [...this.expenseTypes];
@@ -110,11 +111,14 @@ export class TransactionPage implements OnInit {
             chevronDownOutline,
             searchOutline,
             addOutline,
-            listOutline
+            listOutline,
+            calculatorOutline,
+            trashOutline
         });
-        
+
         // Initialize sub-expenses with null amounts
         this.subExpenses = this.subExpenseOptions.map(name => ({ name, amount: null }));
+        this.filteredSubExpenses = [...this.subExpenses];
 
         this.transactionForm = this.fb.group({
             date: [new Date().toISOString(), Validators.required],
@@ -282,6 +286,17 @@ export class TransactionPage implements OnInit {
         }
     }
 
+    searchSubExpense(ev: any) {
+        const val = ev.target.value;
+        if (val && val.trim() !== '') {
+            this.filteredSubExpenses = this.subExpenses.filter((item) => {
+                return item.name.toLowerCase().indexOf(val.toLowerCase()) > -1;
+            });
+        } else {
+            this.filteredSubExpenses = [...this.subExpenses];
+        }
+    }
+
     selectIncomeSource(source: string) {
         this.transactionForm.patchValue({ incomeSource: source });
         this.isIncomeSourceModalOpen = false;
@@ -311,10 +326,24 @@ export class TransactionPage implements OnInit {
     }
 
     openSubExpenseModal() {
+        this.filteredSubExpenses = [...this.subExpenses];
         this.isSubExpenseModalOpen = true;
     }
 
     closeSubExpenseModal() {
         this.isSubExpenseModalOpen = false;
+    }
+
+    calculateTotal() {
+        const total = this.activeSubExpenses.reduce((sum, se) => sum + (se.amount || 0), 0);
+        this.transactionForm.patchValue({ amount: total > 0 ? total.toFixed(2) : '' });
+    }
+
+    removeSubExpense(se: SubExpense) {
+        const item = this.subExpenses.find(s => s.name === se.name);
+        if (item) {
+            item.amount = null;
+            this.calculateTotal();
+        }
     }
 }
