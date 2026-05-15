@@ -1,0 +1,59 @@
+<ion-content [fullscreen]="true" class="ion-padding">
+    <div class="register-container">
+        <div class="register-header">
+            <h1>Create Account</h1>
+            <p>Join us to manage your money better</p>
+        </div>
+
+        <form [formGroup]="registerForm" (ngSubmit)="onRegister()">
+            <div class="input-group">
+                <ion-input label="Email" label-placement="floating" fill="outline" type="email" formControlName="email" placeholder="Enter your email" class="custom-input">
+                    <ion-icon slot="start" name="mail-outline" aria-hidden="true"></ion-icon>
+                </ion-input>
+                <ion-text color="danger" *ngIf="registerForm.get('email')?.touched && registerForm.get('email')?.errors?.['required']">
+                    <p class="error-text">Email is required</p>
+                </ion-text>
+                <ion-text color="danger" *ngIf="registerForm.get('email')?.touched && registerForm.get('email')?.errors?.['email']">
+                    <p class="error-text">Please enter a valid email</p>
+                </ion-text>
+            </div>
+
+            <div class="input-group ion-margin-top">
+                <ion-input label="Password" label-placement="floating" fill="outline" type="password" formControlName="password" placeholder="Enter your password" class="custom-input">
+                    <ion-icon slot="start" name="lock-closed-outline" aria-hidden="true"></ion-icon>
+                </ion-input>
+                <ion-text color="danger" *ngIf="registerForm.get('password')?.touched && registerForm.get('password')?.errors?.['required']">
+                    <p class="error-text">Password is required</p>
+                </ion-text>
+                <ion-text color="danger" *ngIf="registerForm.get('password')?.touched && registerForm.get('password')?.errors?.['minlength']">
+                    <p class="error-text">Password must be at least 6 characters</p>
+                </ion-text>
+            </div>
+
+            <div class="input-group ion-margin-top">
+                <ion-input label="Confirm Password" label-placement="floating" fill="outline" type="password" formControlName="confirmPassword" placeholder="Confirm your password" class="custom-input">
+                    <ion-icon slot="start" name="lock-closed-outline" aria-hidden="true"></ion-icon>
+                </ion-input>
+                <ion-text color="danger" *ngIf="registerForm.get('confirmPassword')?.touched && registerForm.get('confirmPassword')?.errors?.['required']">
+                    <p class="error-text">Please confirm your password</p>
+                </ion-text>
+                <ion-text color="danger" *ngIf="registerForm.touched && registerForm.errors?.['passwordMismatch']">
+                    <p class="error-text">Passwords do not match</p>
+                </ion-text>
+            </div>
+
+            <ion-text color="danger" *ngIf="errorMessage">
+                <p class="error-text central-error">{{ errorMessage }}</p>
+            </ion-text>
+
+            <ion-button expand="block" type="submit" class="ion-margin-top register-button" [disabled]="!registerForm.valid">
+                <ion-icon name="person-add-outline" slot="start"></ion-icon>
+                Sign Up
+            </ion-button>
+        </form>
+
+        <div class="login-link ion-text-center ion-margin-top">
+            <p>Already have an account? <a routerLink="/login">Login</a></p>
+        </div>
+    </div>
+</ion-content>

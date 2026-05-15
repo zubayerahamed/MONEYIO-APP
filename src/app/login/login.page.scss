@@ -1,0 +1,80 @@
+.login-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+
+    .login-header {
+        text-align: center;
+        margin-bottom: 40px;
+
+        h1 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+            color: var(--ion-color-dark);
+        }
+
+        p {
+            color: var(--ion-color-medium);
+            font-size: 1rem;
+        }
+    }
+
+    .custom-input {
+        --border-radius: 12px;
+        --padding-start: 12px;
+        --highlight-color-focused: var(--ion-color-primary);
+        --border-color: var(--ion-color-step-300, #d7d8da);
+        --border-width: 1px;
+        --border-style: solid;
+        margin-bottom: 4px;
+
+        ion-icon {
+            color: var(--ion-color-medium);
+            margin-right: 8px;
+        }
+    }
+
+    .error-text {
+        font-size: 0.75rem;
+        margin-top: 4px;
+        margin-left: 4px;
+    }
+
+    .central-error {
+        text-align: center;
+        margin: 15px 0;
+    }
+
+    .login-button {
+        --border-radius: 12px;
+        height: 52px;
+        font-weight: 600;
+        margin-top: 24px;
+        --box-shadow: 0 4px 12px rgba(var(--ion-color-primary-rgb), 0.3);
+    }
+
+    .register-link {
+        margin-top: 30px;
+
+        p {
+            font-size: 0.95rem;
+            color: var(--ion-color-medium);
+
+            a {
+                color: var(--ion-color-primary);
+                text-decoration: none;
+                font-weight: 700;
+                margin-left: 4px;
+            }
+        }
+    }
+}
+
+// Adjusting for dark mode if variables exist
+:host-context(.ios) .login-header h1 {
+    font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Roboto", sans-serif;
+}

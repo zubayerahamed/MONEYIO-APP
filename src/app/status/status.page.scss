@@ -1,0 +1,144 @@
+.navigation-toolbar {
+  --background: transparent;
+  
+  .navigation-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 16px;
+    height: 48px;
+
+    .current-date {
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: var(--ion-color-dark);
+      flex: 1;
+      text-align: center;
+    }
+
+    ion-button {
+      --padding-start: 8px;
+      --padding-end: 8px;
+      margin: 0;
+      
+      ion-icon {
+        font-size: 1.5rem;
+      }
+    }
+  }
+}
+
+ion-segment {
+  --background: transparent;
+  padding: 0 16px;
+  
+  ion-segment-button {
+    --indicator-color: var(--ion-color-primary);
+    --color: var(--ion-color-medium);
+    --color-checked: var(--ion-color-primary);
+    font-weight: 600;
+    min-height: 45px;
+  }
+
+  &.income-theme {
+    ion-segment-button {
+      --indicator-color: var(--ion-color-success);
+      --color-checked: #ffffff;
+    }
+  }
+
+  &.expense-theme {
+    ion-segment-button {
+      --indicator-color: var(--ion-color-danger);
+      --color-checked: #ffffff;
+    }
+  }
+
+  &.category-segment {
+    margin-top: 0;
+    margin-bottom: 8px;
+    ion-segment-button {
+      min-height: 32px;
+      font-size: 0.85rem;
+    }
+  }
+}
+
+.chart-container {
+  .main-chart-card {
+    margin: 0;
+    border-radius: 16px;
+    --box-shadow: none;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+
+    ion-card-content {
+      padding: 0;
+    }
+  }
+
+  .donut-wrapper {
+    position: relative;
+    height: 250px;
+    width: 100%;
+    margin-bottom: 20px;
+
+    .chart-center-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+
+      .total-label {
+        font-size: 0.9rem;
+        color: var(--ion-color-medium);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      .total-amount {
+        font-size: 1.5rem;
+        font-weight: 800;
+        color: var(--ion-color-dark);
+      }
+    }
+  }
+
+  .data-list {
+    background: transparent;
+    margin-top: 10px;
+
+    ion-item {
+      --background: transparent;
+      --padding-start: 0;
+      --inner-padding-end: 0;
+
+      .color-dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        margin-right: 16px;
+      }
+
+      h2 {
+        font-weight: 600;
+        font-size: 1.05rem;
+        margin-bottom: 2px;
+      }
+
+      p {
+        font-size: 0.85rem;
+        color: var(--ion-color-medium);
+      }
+
+      .item-amount {
+        font-weight: 700;
+        font-size: 1rem;
+      }
+    }
+  }
+}

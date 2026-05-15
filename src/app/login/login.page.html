@@ -1,0 +1,46 @@
+<ion-content [fullscreen]="true" class="ion-padding">
+    <div class="login-container">
+        <div class="login-header">
+            <h1>Welcome Back</h1>
+            <p>Please login to your account</p>
+        </div>
+
+        <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
+            <div class="input-group">
+                <ion-input label="Email" label-placement="floating" fill="outline" type="email" formControlName="email" placeholder="Enter your email" class="custom-input">
+                    <ion-icon slot="start" name="mail-outline" aria-hidden="true"></ion-icon>
+                </ion-input>
+                <ion-text color="danger" *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.errors?.['required']">
+                    <p class="error-text">Email is required</p>
+                </ion-text>
+                <ion-text color="danger" *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.errors?.['email']">
+                    <p class="error-text">Please enter a valid email</p>
+                </ion-text>
+            </div>
+
+            <div class="input-group ion-margin-top">
+                <ion-input label="Password" label-placement="floating" fill="outline" type="password" formControlName="password" placeholder="Enter your password" class="custom-input">
+                    <ion-icon slot="start" name="lock-closed-outline" aria-hidden="true"></ion-icon>
+                </ion-input>
+                <ion-text color="danger" *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.errors?.['required']">
+                    <p class="error-text">Password is required</p>
+                </ion-text>
+                <ion-text color="danger" *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.errors?.['minlength']">
+                    <p class="error-text">Password must be at least 6 characters</p>
+                </ion-text>
+            </div>
+
+            <ion-text color="danger" *ngIf="errorMessage">
+                <p class="error-text central-error">{{ errorMessage }}</p>
+            </ion-text>
+
+            <ion-button expand="block" type="submit" class="ion-margin-top login-button" [disabled]="!loginForm.valid">
+                <ion-icon name="log-in-outline" slot="start"></ion-icon> Sign In
+            </ion-button>
+        </form>
+
+        <div class="register-link ion-text-center ion-margin-top">
+            <p>Don't have an account? <a routerLink="/register">Register</a></p>
+        </div>
+    </div>
+</ion-content>
