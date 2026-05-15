@@ -10,7 +10,7 @@
     --box-shadow: 0 28px 48px rgba(0, 0, 0, 0.4);
     
     .modal-header {
-        padding: 8px 16px 16px;
+        padding: 8px 16px 8px;
         text-align: center;
         
         h3 {
@@ -19,6 +19,15 @@
             font-weight: 600;
             color: var(--ion-color-dark);
         }
+    }
+
+    .modal-searchbar {
+        padding-left: 16px;
+        padding-right: 16px;
+        --border-radius: 12px;
+        --box-shadow: none;
+        --background: var(--ion-color-step-50, #f4f5f8);
+        margin-bottom: 8px;
     }
 
     ion-content {

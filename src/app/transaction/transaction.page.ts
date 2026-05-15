@@ -19,10 +19,11 @@ import {
     IonToolbar,
     IonGrid,
     IonRow,
-    IonCol
+    IonCol,
+    IonSearchbar
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { addCircleOutline, arrowForwardOutline, briefcaseOutline, calendarOutline, cameraOutline, cardOutline, cartOutline, cashOutline, closeOutline, createOutline, walletOutline, chevronDownOutline } from 'ionicons/icons';
+import { addCircleOutline, arrowForwardOutline, briefcaseOutline, calendarOutline, cameraOutline, cardOutline, cartOutline, cashOutline, closeOutline, createOutline, walletOutline, chevronDownOutline, searchOutline } from 'ionicons/icons';
 
 @Component({
     selector: 'app-transaction',
@@ -50,7 +51,8 @@ import { addCircleOutline, arrowForwardOutline, briefcaseOutline, calendarOutlin
         IonModal,
         IonGrid,
         IonRow,
-        IonCol
+        IonCol,
+        IonSearchbar
     ],
 })
 export class TransactionPage implements OnInit {
@@ -68,6 +70,11 @@ export class TransactionPage implements OnInit {
     incomeSources = ['Salary', 'Freelance', 'Investment', 'Gift', 'Other'];
     expenseTypes = ['Food', 'Transport', 'Rent', 'Shopping', 'Entertainment', 'Health', 'Other'];
     wallets = ['Cash', 'Bank Account', 'Credit Card', 'Savings'];
+    
+    filteredIncomeSources = [...this.incomeSources];
+    filteredExpenseTypes = [...this.expenseTypes];
+    filteredWallets = [...this.wallets];
+
     capturedImage: string | null = null;
 
     constructor(private fb: FormBuilder) {
@@ -83,7 +90,8 @@ export class TransactionPage implements OnInit {
             createOutline,
             cameraOutline,
             closeOutline,
-            chevronDownOutline
+            chevronDownOutline,
+            searchOutline
         });
         this.transactionForm = this.fb.group({
             date: [new Date().toISOString(), Validators.required],
@@ -196,23 +204,56 @@ export class TransactionPage implements OnInit {
     }
 
     openIncomeSourceModal() {
-        console.log('openIncomeSourceModal called');
+        this.filteredIncomeSources = [...this.incomeSources];
         this.isIncomeSourceModalOpen = true;
     }
 
     openExpenseTypeModal() {
-        console.log('openExpenseTypeModal called');
+        this.filteredExpenseTypes = [...this.expenseTypes];
         this.isExpenseTypeModalOpen = true;
     }
 
     openFromWalletModal() {
-        console.log('openFromWalletModal called');
+        this.filteredWallets = [...this.wallets];
         this.isFromWalletModalOpen = true;
     }
 
     openToWalletModal() {
-        console.log('openToWalletModal called');
+        this.filteredWallets = [...this.wallets];
         this.isToWalletModalOpen = true;
+    }
+
+    searchIncomeSource(ev: any) {
+        const val = ev.target.value;
+        if (val && val.trim() !== '') {
+            this.filteredIncomeSources = this.incomeSources.filter((item) => {
+                return item.toLowerCase().indexOf(val.toLowerCase()) > -1;
+            });
+        } else {
+            this.filteredIncomeSources = [...this.incomeSources];
+        }
+    }
+
+    searchExpenseType(ev: any) {
+        const val = ev.target.value;
+        if (val && val.trim() !== '') {
+            this.filteredExpenseTypes = this.expenseTypes.filter((item) => {
+                return item.toLowerCase().indexOf(val.toLowerCase()) > -1;
+            });
+        } else {
+            this.filteredExpenseTypes = [...this.expenseTypes];
+        }
+    }
+
+    searchWallet(ev: any) {
+        const val = ev.target.value;
+        if (val && val.trim() !== '') {
+            this.filteredWallets = this.wallets.filter((item) => {
+                return item.toLowerCase().indexOf(val.toLowerCase()) > -1;
+            });
+        } else {
+            this.filteredWallets = [...this.wallets];
+        }
     }
 
     selectIncomeSource(source: string) {
