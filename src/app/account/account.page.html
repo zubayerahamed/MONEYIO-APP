@@ -4,7 +4,7 @@
             <ion-menu-button></ion-menu-button>
         </ion-buttons>
         <ion-title>
-            Account
+            Accounts
         </ion-title>
     </ion-toolbar>
 </ion-header>
@@ -12,9 +12,38 @@
 <ion-content [fullscreen]="true">
     <ion-header collapse="condense">
         <ion-toolbar>
-            <ion-title size="large">Account</ion-title>
+            <ion-title size="large">Accounts</ion-title>
         </ion-toolbar>
     </ion-header>
 
-    <app-explore-container name="Account page"></app-explore-container>
+    <div class="summary-cards">
+        <ion-card color="primary">
+            <ion-card-header>
+                <ion-card-subtitle>Total Balance</ion-card-subtitle>
+                <ion-card-title>{{ totalBalance | currency }}</ion-card-title>
+            </ion-card-header>
+        </ion-card>
+
+        <ion-card color="light" *ngIf="excludedBalance !== 0">
+            <ion-card-header>
+                <ion-card-subtitle>Excluded Balance</ion-card-subtitle>
+                <ion-card-title>{{ excludedBalance | currency }}</ion-card-title>
+            </ion-card-header>
+        </ion-card>
+    </div>
+
+    <ion-list>
+        <ion-item *ngFor="let account of accounts">
+            <ion-icon [name]="account.icon" slot="start" color="primary"></ion-icon>
+            <ion-label>
+                <h2>{{ account.name }}</h2>
+                <div *ngIf="account.isExcluded">
+                    <ion-badge color="warning">Excluded</ion-badge>
+                </div>
+            </ion-label>
+            <ion-note slot="end" [color]="account.balance < 0 ? 'danger' : 'dark'">
+                {{ account.balance | currency }}
+            </ion-note>
+        </ion-item>
+    </ion-list>
 </ion-content>

@@ -1,0 +1,35 @@
+.summary-cards {
+    display: flex;
+    flex-direction: column;
+    padding: 8px;
+
+    ion-card {
+        margin: 8px;
+    }
+}
+
+ion-item {
+    --padding-start: 16px;
+    --inner-padding-end: 16px;
+
+    ion-icon {
+        font-size: 24px;
+        margin-right: 16px;
+    }
+
+    h2 {
+        font-weight: 600;
+        margin-bottom: 4px;
+    }
+
+    ion-badge {
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    ion-note {
+        font-size: 16px;
+        font-weight: 500;
+    }
+}

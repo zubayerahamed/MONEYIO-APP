@@ -4,29 +4,28 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import {
     IonButton,
     IonButtons,
+    IonCol,
     IonContent,
     IonDatetime,
+    IonGrid,
     IonHeader,
     IonIcon,
     IonInput,
+    IonItem,
     IonLabel,
+    IonList,
     IonMenuButton,
     IonModal,
+    IonRow,
+    IonSearchbar,
     IonSegment,
     IonSegmentButton,
     IonTextarea,
     IonTitle,
-    IonToolbar,
-    IonGrid,
-    IonRow,
-    IonCol,
-    IonSearchbar,
-    IonList,
-    IonItem,
-    IonNote
+    IonToolbar
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { calculatorOutline, addCircleOutline, arrowForwardOutline, briefcaseOutline, calendarOutline, cameraOutline, cardOutline, cartOutline, cashOutline, closeOutline, createOutline, walletOutline, chevronDownOutline, searchOutline, addOutline, listOutline, trashOutline } from 'ionicons/icons';
+import { addCircleOutline, addOutline, arrowForwardOutline, briefcaseOutline, calculatorOutline, calendarOutline, cameraOutline, cardOutline, cartOutline, cashOutline, chevronDownOutline, closeOutline, createOutline, listOutline, searchOutline, trashOutline, walletOutline } from 'ionicons/icons';
 
 interface SubExpense {
     name: string;
@@ -63,7 +62,6 @@ interface SubExpense {
         IonSearchbar,
         IonList,
         IonItem,
-        IonNote
     ],
 })
 export class TransactionPage implements OnInit {
