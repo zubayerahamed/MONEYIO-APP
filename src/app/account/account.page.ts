@@ -1,27 +1,26 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import {
-    IonHeader,
-    IonToolbar,
-    IonTitle,
-    IonContent,
+    IonBadge,
+    IonButton,
     IonButtons,
-    IonMenuButton,
-    IonList,
-    IonItem,
-    IonLabel,
-    IonNote,
-    IonIcon,
-    IonText,
     IonCard,
-    IonCardContent,
     IonCardHeader,
     IonCardSubtitle,
     IonCardTitle,
-    IonBadge
+    IonContent,
+    IonHeader,
+    IonIcon,
+    IonItem,
+    IonLabel,
+    IonList,
+    IonMenuButton,
+    IonNote,
+    IonTitle,
+    IonToolbar
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { walletOutline, eyeOffOutline, eyeOutline, cashOutline, businessOutline, cardOutline, peopleOutline, helpCircleOutline } from 'ionicons/icons';
+import { add, businessOutline, cardOutline, cashOutline, eyeOffOutline, eyeOutline, helpCircleOutline, peopleOutline, walletOutline } from 'ionicons/icons';
 
 interface Account {
     id: string;
@@ -49,13 +48,12 @@ interface Account {
         IonLabel,
         IonNote,
         IonIcon,
-        IonText,
         IonCard,
-        IonCardContent,
         IonCardHeader,
         IonCardSubtitle,
         IonCardTitle,
-        IonBadge
+        IonBadge,
+        IonButton
     ],
 })
 export class AccountPage implements OnInit {
@@ -72,16 +70,7 @@ export class AccountPage implements OnInit {
     excludedBalance: number = 0;
 
     constructor() {
-        addIcons({
-            walletOutline,
-            eyeOffOutline,
-            eyeOutline,
-            cashOutline,
-            businessOutline,
-            cardOutline,
-            peopleOutline,
-            helpCircleOutline
-        });
+        addIcons({ add, walletOutline, eyeOffOutline, eyeOutline, cashOutline, businessOutline, cardOutline, peopleOutline, helpCircleOutline });
     }
 
     ngOnInit() {
@@ -96,5 +85,9 @@ export class AccountPage implements OnInit {
         this.excludedBalance = this.accounts
             .filter(a => a.isExcluded)
             .reduce((sum, a) => sum + a.balance, 0);
+    }
+
+    addAccount() {
+        console.log('Add account');
     }
 }
