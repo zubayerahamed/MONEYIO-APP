@@ -1,4 +1,4 @@
-﻿.date-modal {
+.date-modal {
     --height: fit-content;
     --width: fit-content;
     --border-radius: 16px;
@@ -167,6 +167,20 @@
     }
 }
 
+.loan-mode {
+    .grid-selection-item.selected {
+        background-color: rgba(var(--ion-color-warning-rgb), 0.1);
+
+        .icon-circle {
+            background-color: var(--ion-color-warning);
+        }
+
+        ion-label {
+            color: var(--ion-color-warning);
+        }
+    }
+}
+
 .transaction-form {
     max-width: 500px;
     margin: 0 auto;
@@ -323,6 +337,16 @@
         }
     }
 
+    &.loan-mode {
+        .custom-input {
+            --highlight-color-focused: var(--ion-color-warning);
+        }
+
+        .save-button {
+            --box-shadow: 0 4px 12px rgba(var(--ion-color-warning-rgb), 0.3);
+        }
+    }
+
     ion-select.custom-input {
         --padding-start: 16px;
         --padding-end: 8px;
@@ -382,32 +406,53 @@
     }
 }
 
-ion-segment {
-    --background: transparent;
-    padding: 0 16px;
-    margin-bottom: 10px;
+.single-row-segment-container {
+    padding: 0 16px 12px;
 
-    ion-segment-button {
-        --indicator-color: var(--ion-color-primary);
-        --color: var(--ion-color-medium);
-        --color-checked: var(--ion-color-primary);
-        font-weight: 600;
-        min-height: 45px;
-    }
+    ion-segment {
+        --background: var(--ion-color-step-50, #f4f5f8);
+        --border-radius: 10px;
+        padding: 0;
+        margin: 0;
+        height: 32px;
+        min-height: 32px;
 
-    &.expense-theme {
         ion-segment-button {
-            --indicator-color: var(--ion-color-danger);
-            --color-checked: var(--ion-color-danger);
+            --indicator-color: transparent;
+            --color: var(--ion-color-medium);
+            --color-checked: white;
+            --border-radius: 8px;
+            margin: 2px;
+            height: 28px;
+            min-height: 28px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: capitalize;
+            transition: all 0.3s ease;
+
+            &::before {
+                border: none !important;
+            }
         }
-    }
 
-    &.income-theme {
-        ion-segment-button {
-            --indicator-color: var(--ion-color-success);
-            --color-checked: var(--ion-color-success);
+        &.income-theme ion-segment-button.segment-button-checked {
+            --background-checked: var(--ion-color-success);
+            background: var(--ion-color-success);
+        }
+
+        &.expense-theme ion-segment-button.segment-button-checked {
+            --background-checked: var(--ion-color-danger);
+            background: var(--ion-color-danger);
+        }
+
+        &.loan-theme ion-segment-button.segment-button-checked {
+            --background-checked: var(--ion-color-warning);
+            background: var(--ion-color-warning);
+        }
+
+        &.transfer-theme ion-segment-button.segment-button-checked {
+            --background-checked: var(--ion-color-primary);
+            background: var(--ion-color-primary);
         }
     }
 }
-
-/* test append */

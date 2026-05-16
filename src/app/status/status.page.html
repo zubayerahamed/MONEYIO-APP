@@ -33,42 +33,50 @@
     <ion-toolbar>
         <ion-segment [value]="statusType" (ionChange)="statusTypeChanged($event)" mode="ios" class="category-segment"
                      [class.income-theme]="statusType === 'income'" 
-                     [class.expense-theme]="statusType === 'expense'">
+                     [class.expense-theme]="statusType === 'expense'"
+                     [class.loan-theme]="statusType === 'loan'">
             <ion-segment-button value="income">
                 <ion-label>Income</ion-label>
             </ion-segment-button>
             <ion-segment-button value="expense">
                 <ion-label>Expense</ion-label>
             </ion-segment-button>
+            <ion-segment-button value="loan">
+                <ion-label>Loan</ion-label>
+            </ion-segment-button>
         </ion-segment>
     </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-    <div class="chart-container ion-padding">
-        <ion-card class="main-chart-card">
-            <ion-card-content>
-                <div class="donut-wrapper">
-                    <canvas #donutCanvas></canvas>
-                    <div class="chart-center-text">
-                        <span class="total-label">Total</span>
-                        <span class="total-amount">${{ totalAmount | number:'1.2-2' }}</span>
+<ion-content [fullscreen]="true" [scrollY]="false">
+    <div class="status-container">
+        <div class="chart-section ion-padding-horizontal ion-padding-top">
+            <ion-card class="main-chart-card">
+                <ion-card-content>
+                    <div class="donut-wrapper">
+                        <canvas #donutCanvas></canvas>
+                        <div class="chart-center-text">
+                            <span class="total-label">Total</span>
+                            <span class="total-amount">${{ totalAmount | number:'1.2-2' }}</span>
+                        </div>
                     </div>
-                </div>
-            </ion-card-content>
-        </ion-card>
+                </ion-card-content>
+            </ion-card>
+        </div>
 
-        <ion-list lines="full" class="data-list">
-            <ion-item *ngFor="let item of currentData">
-                <div class="color-dot" [style.background-color]="item.color" slot="start"></div>
-                <ion-label>
-                    <h2>{{ item.label }}</h2>
-                    <p>{{ (item.amount / totalAmount * 100) | number:'1.1-1' }}%</p>
-                </ion-label>
-                <ion-text slot="end" [color]="statusType === 'income' ? 'success' : 'danger'">
-                    <span class="item-amount">${{ item.amount | number:'1.2-2' }}</span>
-                </ion-text>
-            </ion-item>
-        </ion-list>
+        <div class="list-section ion-padding-horizontal">
+            <ion-list lines="full" class="data-list">
+                <ion-item *ngFor="let item of currentData">
+                    <div class="color-dot" [style.background-color]="item.color" slot="start"></div>
+                    <ion-label>
+                        <h2>{{ item.label }}</h2>
+                        <p>{{ (item.amount / totalAmount * 100) | number:'1.1-1' }}%</p>
+                    </ion-label>
+                    <ion-text slot="end" [color]="statusType === 'income' ? 'success' : (statusType === 'expense' ? 'danger' : 'primary')">
+                        <span class="item-amount">${{ item.amount | number:'1.2-2' }}</span>
+                    </ion-text>
+                </ion-item>
+            </ion-list>
+        </div>
     </div>
 </ion-content>

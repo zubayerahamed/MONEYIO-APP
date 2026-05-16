@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import {
     IonButton,
@@ -22,10 +22,14 @@ import {
     IonSegmentButton,
     IonTextarea,
     IonTitle,
-    IonToolbar
+    IonToolbar,
+    ModalController
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { addCircleOutline, addOutline, arrowForwardOutline, briefcaseOutline, calculatorOutline, calendarOutline, cameraOutline, cardOutline, cartOutline, cashOutline, chevronDownOutline, closeOutline, createOutline, listOutline, searchOutline, trashOutline, walletOutline } from 'ionicons/icons';
+import { DataService } from '../services/data.service';
+import { CategoryModalComponent } from '../modals/category-modal/category-modal.component';
+import { Subscription } from 'rxjs';
 
 interface SubExpense {
     name: string;
@@ -64,7 +68,7 @@ interface SubExpense {
         IonItem,
     ],
 })
-export class TransactionPage implements OnInit {
+export class TransactionPage implements OnInit, OnDestroy {
     @ViewChild('amountInput', { static: false }) amountInput!: IonInput;
 
     transactionForm: FormGroup;
@@ -76,24 +80,27 @@ export class TransactionPage implements OnInit {
     isToWalletModalOpen = false;
     isSubExpenseModalOpen = false;
 
-    // Mock data for selects
-    incomeSources = ['Salary', 'Freelance', 'Investment', 'Gift', 'Other'];
-    expenseTypes = ['Food', 'Transport', 'Rent', 'Shopping', 'Entertainment', 'Health', 'Other'];
-    wallets = ['Cash', 'Bank Account', 'Credit Card', 'Savings'];
-
-    // Mock data for sub expenses
-    subExpenseOptions = ['Grocery', 'Fast Food', 'Fuel', 'Bus/Train', 'Cloths', 'Electronics', 'Cinema', 'Games', 'Medicine', 'Gym', 'Internet', 'Electricity', 'Water', 'Other'];
+    incomeSources: string[] = [];
+    expenseTypes: string[] = [];
+    wallets: string[] = [];
+    subExpenseOptions: string[] = [];
 
     subExpenses: SubExpense[] = [];
     filteredSubExpenses: SubExpense[] = [];
 
-    filteredIncomeSources = [...this.incomeSources];
-    filteredExpenseTypes = [...this.expenseTypes];
-    filteredWallets = [...this.wallets];
+    filteredIncomeSources: string[] = [];
+    filteredExpenseTypes: string[] = [];
+    filteredWallets: string[] = [];
 
     capturedImage: string | null = null;
 
-    constructor(private fb: FormBuilder) {
+    private subscriptions: Subscription = new Subscription();
+
+    constructor(
+        private fb: FormBuilder,
+        private dataService: DataService,
+        private modalCtrl: ModalController
+    ) {
         addIcons({
             calendarOutline,
             cashOutline,
@@ -114,10 +121,6 @@ export class TransactionPage implements OnInit {
             trashOutline
         });
 
-        // Initialize sub-expenses with null amounts
-        this.subExpenses = this.subExpenseOptions.map(name => ({ name, amount: null }));
-        this.filteredSubExpenses = [...this.subExpenses];
-
         this.transactionForm = this.fb.group({
             date: [new Date().toISOString(), Validators.required],
             amount: ['', [Validators.required, Validators.min(0.01)]],
@@ -131,6 +134,39 @@ export class TransactionPage implements OnInit {
 
     ngOnInit() {
         this.updateValidators();
+
+        this.subscriptions.add(
+            this.dataService.getIncomeSources().subscribe(sources => {
+                this.incomeSources = sources;
+                this.filteredIncomeSources = [...sources];
+            })
+        );
+
+        this.subscriptions.add(
+            this.dataService.getExpenseTypes().subscribe(types => {
+                this.expenseTypes = types;
+                this.filteredExpenseTypes = [...types];
+            })
+        );
+
+        this.subscriptions.add(
+            this.dataService.getWallets().subscribe(wallets => {
+                this.wallets = wallets;
+                this.filteredWallets = [...wallets];
+            })
+        );
+
+        this.subscriptions.add(
+            this.dataService.getSubExpenseOptions().subscribe(options => {
+                this.subExpenseOptions = options;
+                this.subExpenses = this.subExpenseOptions.map(name => ({ name, amount: null }));
+                this.filteredSubExpenses = [...this.subExpenses];
+            })
+        );
+    }
+
+    ngOnDestroy() {
+        this.subscriptions.unsubscribe();
     }
 
     ionViewDidEnter() {
@@ -156,7 +192,7 @@ export class TransactionPage implements OnInit {
         fromWalletControl?.clearValidators();
         toWalletControl?.clearValidators();
 
-        if (this.segmentValue === 'income') {
+        if (this.segmentValue === 'income' || this.segmentValue === 'loan') {
             incomeSourceControl?.setValidators([Validators.required]);
             toWalletControl?.setValidators([Validators.required]);
         } else if (this.segmentValue === 'expense') {
@@ -173,6 +209,50 @@ export class TransactionPage implements OnInit {
         toWalletControl?.updateValueAndValidity();
     }
 
+    async addNewIncomeSource() {
+        const title = this.segmentValue === 'income' ? 'Add Income Source' : 'Add Loan Source';
+        const modal = await this.modalCtrl.create({
+            component: CategoryModalComponent,
+            componentProps: { title: title }
+        });
+        await modal.present();
+        const { data } = await modal.onWillDismiss();
+        if (data) {
+            this.dataService.addIncomeSource(data);
+            this.selectIncomeSource(data);
+        }
+    }
+
+    async addNewExpenseType() {
+        const modal = await this.modalCtrl.create({
+            component: CategoryModalComponent,
+            componentProps: { title: 'Add Expense Type' }
+        });
+        await modal.present();
+        const { data } = await modal.onWillDismiss();
+        if (data) {
+            this.dataService.addExpenseType(data);
+            this.selectExpenseType(data);
+        }
+    }
+
+    async addNewWallet() {
+        const modal = await this.modalCtrl.create({
+            component: CategoryModalComponent,
+            componentProps: { title: 'Add New Wallet' }
+        });
+        await modal.present();
+        const { data } = await modal.onWillDismiss();
+        if (data) {
+            this.dataService.addWallet(data);
+            if (this.isFromWalletModalOpen) {
+                this.selectFromWallet(data);
+            } else if (this.isToWalletModalOpen) {
+                this.selectToWallet(data);
+            }
+        }
+    }
+
     onSave() {
         if (this.transactionForm.valid) {
             console.log('Transaction Saved:', {
@@ -182,18 +262,6 @@ export class TransactionPage implements OnInit {
                 subExpenses: this.activeSubExpenses
             });
             // Handle save logic
-        }
-    }
-
-    onContinue() {
-        if (this.transactionForm.valid) {
-            console.log('Transaction Continued:', {
-                type: this.segmentValue,
-                ...this.transactionForm.value,
-                image: this.capturedImage,
-                subExpenses: this.activeSubExpenses
-            });
-            // Handle continue logic (e.g., save and reset for next entry)
             this.transactionForm.reset({
                 date: new Date().toISOString(),
                 amount: ''

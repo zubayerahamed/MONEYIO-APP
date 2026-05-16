@@ -7,25 +7,34 @@
             Add Transaction
         </ion-title>
     </ion-toolbar>
-    <ion-toolbar>
-        <ion-segment [value]="segmentValue" (ionChange)="segmentChanged($event)" mode="md"
-            [class.expense-theme]="segmentValue === 'expense'" [class.income-theme]="segmentValue === 'income'">
+    
+    <div class="single-row-segment-container">
+        <ion-segment [value]="segmentValue" (ionChange)="segmentChanged($event)" mode="ios"
+            [class.income-theme]="segmentValue === 'income'"
+            [class.expense-theme]="segmentValue === 'expense'"
+            [class.loan-theme]="segmentValue === 'loan'"
+            [class.transfer-theme]="segmentValue === 'transfer'">
             <ion-segment-button value="income">
                 <ion-label>Income</ion-label>
             </ion-segment-button>
             <ion-segment-button value="expense">
                 <ion-label>Expense</ion-label>
             </ion-segment-button>
+            <ion-segment-button value="loan">
+                <ion-label>Loan</ion-label>
+            </ion-segment-button>
             <ion-segment-button value="transfer">
                 <ion-label>Transfer</ion-label>
             </ion-segment-button>
         </ion-segment>
-    </ion-toolbar>
+    </div>
 </ion-header>
 
 <ion-content [fullscreen]="true" class="ion-padding">
-    <form [formGroup]="transactionForm" class="transaction-form" [class.expense-mode]="segmentValue === 'expense'"
-        [class.income-mode]="segmentValue === 'income'">
+    <form [formGroup]="transactionForm" class="transaction-form" 
+        [class.expense-mode]="segmentValue === 'expense'"
+        [class.income-mode]="segmentValue === 'income'"
+        [class.loan-mode]="segmentValue === 'loan'">
         <div class="form-container">
             <!-- Date & Camera -->
             <div class="input-group-row">
@@ -37,7 +46,7 @@
                 </div>
 
                 <ion-button fill="outline" (click)="openCamera($event)" class="external-camera-btn"
-                    [color]="segmentValue === 'expense' ? 'danger' : (segmentValue === 'income' ? 'success' : 'primary')">
+                    [color]="segmentValue === 'expense' ? 'danger' : (segmentValue === 'income' ? 'success' : (segmentValue === 'loan' ? 'warning' : 'primary'))">
                     <ion-icon name="camera-outline" aria-hidden="true"></ion-icon>
                 </ion-button>
             </div>
@@ -50,10 +59,10 @@
                 </ion-input>
             </div>
 
-            <!-- Income Source (Income only) -->
-            <div class="input-group" *ngIf="segmentValue === 'income'">
+            <!-- Income/Loan Source (Income or Loan only) -->
+            <div class="input-group" *ngIf="segmentValue === 'income' || segmentValue === 'loan'">
                 <div class="clickable-input-wrapper" (click)="openIncomeSourceModal()">
-                    <ion-input label="Income Source" label-placement="floating" fill="outline"
+                    <ion-input [label]="segmentValue === 'income' ? 'Income Source' : 'Loan Source'" label-placement="floating" fill="outline"
                         formControlName="incomeSource" placeholder="Select Source" class="custom-input" readonly>
                         <ion-icon slot="start" name="briefcase-outline" aria-hidden="true"></ion-icon>
                         <ion-icon slot="end" name="chevron-down-outline" aria-hidden="true"></ion-icon>
@@ -83,8 +92,8 @@
                 </div>
             </div>
 
-            <!-- To Wallet (Income and Transfer) -->
-            <div class="input-group" *ngIf="segmentValue === 'income' || segmentValue === 'transfer'">
+            <!-- To Wallet (Income, Loan, and Transfer) -->
+            <div class="input-group" *ngIf="segmentValue === 'income' || segmentValue === 'loan' || segmentValue === 'transfer'">
                 <div class="clickable-input-wrapper" (click)="openToWalletModal()">
                     <ion-input label="To Wallet" label-placement="floating" fill="outline" formControlName="toWallet"
                         placeholder="Select Wallet" class="custom-input" readonly>
@@ -112,16 +121,10 @@
 
             <div class="button-group ion-margin-top">
                 <ion-button expand="block"
-                    [color]="segmentValue === 'expense' ? 'danger' : (segmentValue === 'income' ? 'success' : 'primary')"
+                    [color]="segmentValue === 'expense' ? 'danger' : (segmentValue === 'income' ? 'success' : (segmentValue === 'loan' ? 'warning' : 'primary'))"
                     class="save-button" (click)="onSave()" [disabled]="!transactionForm.valid">
                     <ion-icon name="add-circle-outline" slot="start"></ion-icon>
                     Save
-                </ion-button>
-                <ion-button expand="block" fill="outline"
-                    [color]="segmentValue === 'expense' ? 'danger' : (segmentValue === 'income' ? 'success' : 'primary')"
-                    class="continue-button" (click)="onContinue()" [disabled]="!transactionForm.valid">
-                    <ion-icon name="arrow-forward-outline" slot="start"></ion-icon>
-                    Continue
                 </ion-button>
             </div>
 
@@ -198,14 +201,14 @@
         <ng-template>
             <ion-content class="ion-padding">
                 <div class="modal-header">
-                    <h3>Select Income Source</h3>
+                    <h3>Select {{ segmentValue === 'income' ? 'Income' : 'Loan' }} Source</h3>
                 </div>
                 <ion-searchbar placeholder="Search Source" (ionInput)="searchIncomeSource($event)" mode="md"
                     class="modal-searchbar"></ion-searchbar>
 
-                <ion-button expand="block" fill="clear" color="medium" class="add-new-income-source-btn">
+                <ion-button expand="block" fill="clear" color="medium" class="add-new-income-source-btn" (click)="addNewIncomeSource()">
                     <ion-icon name="add-outline" slot="start"></ion-icon>
-                    Add New Income Source
+                    Add New {{ segmentValue === 'income' ? 'Income' : 'Loan' }} Source
                 </ion-button>
 
                 <ion-grid>
@@ -236,7 +239,7 @@
                 <ion-searchbar placeholder="Search Type" (ionInput)="searchExpenseType($event)" mode="md"
                     class="modal-searchbar"></ion-searchbar>
 
-                <ion-button expand="block" fill="clear" color="medium" class="add-new-expense-type-btn">
+                <ion-button expand="block" fill="clear" color="medium" class="add-new-expense-type-btn" (click)="addNewExpenseType()">
                     <ion-icon name="add-outline" slot="start"></ion-icon>
                     Add New Expense Type
                 </ion-button>
@@ -269,7 +272,7 @@
                 <ion-searchbar placeholder="Search Wallet" (ionInput)="searchWallet($event)" mode="md"
                     class="modal-searchbar"></ion-searchbar>
 
-                <ion-button expand="block" fill="clear" color="medium" class="add-new-wallet-btn">
+                <ion-button expand="block" fill="clear" color="medium" class="add-new-wallet-btn" (click)="addNewWallet()">
                     <ion-icon name="add-outline" slot="start"></ion-icon>
                     Add New Wallet
                 </ion-button>
@@ -301,6 +304,12 @@
                 </div>
                 <ion-searchbar placeholder="Search Wallet" (ionInput)="searchWallet($event)" mode="md"
                     class="modal-searchbar"></ion-searchbar>
+
+                <ion-button expand="block" fill="clear" color="medium" class="add-new-wallet-btn" (click)="addNewWallet()">
+                    <ion-icon name="add-outline" slot="start"></ion-icon>
+                    Add New Wallet
+                </ion-button>
+
                 <ion-grid>
                     <ion-row>
                         <ion-col size="3" *ngFor="let wallet of filteredWallets">

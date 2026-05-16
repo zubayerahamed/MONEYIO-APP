@@ -21,26 +21,36 @@
         </ion-toolbar>
     </ion-header>
 
-    <div class="summary-cards">
-        <ion-card color="primary">
-            <ion-card-header>
-                <ion-card-subtitle>Total Balance</ion-card-subtitle>
-                <ion-card-title>{{ totalBalance | currency }}</ion-card-title>
-            </ion-card-header>
+    <div class="summary-charts-container">
+        <ion-card class="chart-card total-balance-card">
+            <ion-card-content>
+                <div class="chart-wrapper">
+                    <canvas #totalChartCanvas></canvas>
+                    <div class="chart-center-text">
+                        <span class="label">Total</span>
+                        <span class="amount">{{ totalBalance | currency }}</span>
+                    </div>
+                </div>
+            </ion-card-content>
         </ion-card>
 
-        <ion-card color="medium" *ngIf="excludedBalance !== 0">
-            <ion-card-header>
-                <ion-card-subtitle>Excluded Balance</ion-card-subtitle>
-                <ion-card-title>{{ excludedBalance | currency }}</ion-card-title>
-            </ion-card-header>
+        <ion-card class="chart-card excluded-balance-card" *ngIf="excludedBalance !== 0">
+            <ion-card-content>
+                <div class="chart-wrapper">
+                    <canvas #excludedChartCanvas></canvas>
+                    <div class="chart-center-text">
+                        <span class="label">Excluded</span>
+                        <span class="amount">{{ excludedBalance | currency }}</span>
+                    </div>
+                </div>
+            </ion-card-content>
         </ion-card>
     </div>
 
-    <ion-list>
+    <ion-list lines="full">
         <ion-item-sliding *ngFor="let account of accounts">
             <ion-item>
-                <ion-icon [name]="account.icon" slot="start" color="primary"></ion-icon>
+                <div class="color-dot" [style.background-color]="account.color" slot="start"></div>
                 <ion-label>
                     <h2>{{ account.name }}</h2>
                 </ion-label>
@@ -64,7 +74,6 @@
                     <ion-icon name="trash" slot="icon-only"></ion-icon>
                 </ion-item-option>
             </ion-item-options>
-
         </ion-item-sliding>
     </ion-list>
 </ion-content>

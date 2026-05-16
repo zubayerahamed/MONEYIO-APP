@@ -1,46 +1,77 @@
-.summary-cards {
+.summary-charts-container {
     display: flex;
     flex-direction: row;
-    padding: 15px;
+    padding: 10px;
+    gap: 10px;
 
-    ion-card {
-        margin: 4px;
+    .chart-card {
+        margin: 0;
         flex: 1;
-        text-align: center;
+        border-radius: 16px;
+        --box-shadow: none;
+        box-shadow: none;
+        background: var(--ion-color-light);
+
+        ion-card-content {
+            padding: 15px;
+        }
     }
 
-    ion-card-header {
-        ion-card-title {
-            font-size: 20px;
-            font-weight: bold;
+    .chart-wrapper {
+        position: relative;
+        height: 120px;
+        width: 100%;
+
+        .chart-center-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+
+            .label {
+                font-size: 0.75rem;
+                color: var(--ion-color-medium);
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+            }
+
+            .amount {
+                font-size: 0.9rem;
+                font-weight: 700;
+                color: var(--ion-color-dark);
+            }
         }
     }
 }
 
-ion-item {
-    --padding-start: 20px;
-    --inner-padding-end: 20px;
+ion-list {
+    background: transparent;
+}
 
-    ion-icon {
-        font-size: 20px;
+ion-item {
+    --padding-start: 16px;
+    --inner-padding-end: 16px;
+    --background: transparent;
+
+    .color-dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
         margin-right: 16px;
     }
 
     h2 {
         font-weight: 600;
-        margin-bottom: 4px;
-    }
-
-    ion-badge {
-        font-size: 10px;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        padding-top: 5px;
-        margin-top: 5px;
+        font-size: 1rem;
+        margin: 0;
     }
 
     ion-note {
-        font-size: 16px;
-        font-weight: 500;
+        font-size: 1rem;
+        font-weight: 600;
     }
 }

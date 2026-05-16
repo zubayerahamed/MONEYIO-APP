@@ -46,7 +46,7 @@ Chart.register(...registerables);
         IonCardContent,
         IonList,
         IonItem,
-        IonText,
+        IonText
     ],
 })
 export class StatusPage implements OnInit, AfterViewInit {
@@ -71,6 +71,13 @@ export class StatusPage implements OnInit, AfterViewInit {
         { label: 'Rent', amount: 1200, color: '#ffc409' },
         { label: 'Shopping', amount: 450, color: '#eb445a' },
         { label: 'Entertainment', amount: 200, color: '#92949c' }
+    ];
+
+    loanData = [
+        { label: 'Personal Loan', amount: 10000, color: '#3880ff' },
+        { label: 'Car Loan', amount: 25000, color: '#7044ff' },
+        { label: 'Home Loan', amount: 150000, color: '#2dd36f' },
+        { label: 'Student Loan', amount: 15000, color: '#ffce00' }
     ];
 
     constructor() {
@@ -102,7 +109,9 @@ export class StatusPage implements OnInit, AfterViewInit {
     }
 
     get currentData() {
-        return this.statusType === 'income' ? this.incomeData : this.expenseData;
+        if (this.statusType === 'income') return this.incomeData;
+        if (this.statusType === 'expense') return this.expenseData;
+        return this.loanData;
     }
 
     get totalAmount(): number {
