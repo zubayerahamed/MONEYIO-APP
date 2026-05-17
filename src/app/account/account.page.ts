@@ -1,12 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import {
     IonButton,
     IonButtons,
     IonCard,
-    IonCardHeader,
-    IonCardSubtitle,
-    IonCardTitle,
+    IonCardContent,
     IonContent,
     IonHeader,
     IonIcon,
@@ -19,12 +17,11 @@ import {
     IonMenuButton,
     IonNote,
     IonTitle,
-    IonToolbar,
-    IonCardContent
+    IonToolbar
 } from '@ionic/angular/standalone';
+import { Chart, registerables } from 'chart.js';
 import { addIcons } from 'ionicons';
 import { add, eye, eyeOff, pencil, trash } from 'ionicons/icons';
-import { Chart, registerables } from 'chart.js';
 
 Chart.register(...registerables);
 
@@ -55,9 +52,6 @@ interface Account {
         IonNote,
         IonIcon,
         IonCard,
-        IonCardHeader,
-        IonCardSubtitle,
-        IonCardTitle,
         IonButton,
         IonItemSliding,
         IonItemOptions,
@@ -80,7 +74,7 @@ export class AccountPage implements OnInit, AfterViewInit {
 
     totalBalance: number = 0;
     excludedBalance: number = 0;
-    
+
     totalChart: any;
     excludedChart: any;
 
