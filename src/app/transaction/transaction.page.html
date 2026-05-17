@@ -7,13 +7,13 @@
             Add Transaction
         </ion-title>
     </ion-toolbar>
-    
+
     <div class="single-row-segment-container">
         <ion-segment [value]="segmentValue" (ionChange)="segmentChanged($event)" mode="ios"
-            [class.income-theme]="segmentValue === 'income'"
-            [class.expense-theme]="segmentValue === 'expense'"
-            [class.loan-theme]="segmentValue === 'loan'"
-            [class.transfer-theme]="segmentValue === 'transfer'">
+                     [class.income-theme]="segmentValue === 'income'"
+                     [class.expense-theme]="segmentValue === 'expense'"
+                     [class.loan-theme]="segmentValue === 'loan'"
+                     [class.transfer-theme]="segmentValue === 'transfer'">
             <ion-segment-button value="income">
                 <ion-label>Income</ion-label>
             </ion-segment-button>
@@ -31,22 +31,22 @@
 </ion-header>
 
 <ion-content [fullscreen]="true" class="ion-padding">
-    <form [formGroup]="transactionForm" class="transaction-form" 
-        [class.expense-mode]="segmentValue === 'expense'"
-        [class.income-mode]="segmentValue === 'income'"
-        [class.loan-mode]="segmentValue === 'loan'">
+    <form [formGroup]="transactionForm" class="transaction-form"
+          [class.expense-mode]="segmentValue === 'expense'"
+          [class.income-mode]="segmentValue === 'income'"
+          [class.loan-mode]="segmentValue === 'loan'">
         <div class="form-container">
             <!-- Date & Camera -->
             <div class="input-group-row">
                 <div class="date-input-container">
                     <ion-input label="Date" label-placement="floating" fill="outline" [value]="formattedDate" readonly
-                        class="custom-input" (click)="isDateModalOpen = true">
+                               class="custom-input" (click)="isDateModalOpen = true">
                         <ion-icon slot="start" name="calendar-outline"></ion-icon>
                     </ion-input>
                 </div>
 
                 <ion-button fill="outline" (click)="openCamera($event)" class="external-camera-btn"
-                    [color]="segmentValue === 'expense' ? 'danger' : (segmentValue === 'income' ? 'success' : (segmentValue === 'loan' ? 'warning' : 'primary'))">
+                            [color]="segmentValue === 'expense' ? 'danger' : (segmentValue === 'income' ? 'success' : (segmentValue === 'loan' ? 'warning' : 'primary'))">
                     <ion-icon name="camera-outline" aria-hidden="true"></ion-icon>
                 </ion-button>
             </div>
@@ -54,7 +54,7 @@
             <!-- Amount -->
             <div class="input-group">
                 <ion-input #amountInput label="Amount" label-placement="floating" fill="outline" type="number"
-                    formControlName="amount" placeholder="0.00" inputmode="decimal" class="custom-input">
+                           formControlName="amount" placeholder="0.00" inputmode="decimal" class="custom-input">
                     <ion-icon slot="start" name="cash-outline" aria-hidden="true"></ion-icon>
                 </ion-input>
             </div>
@@ -63,7 +63,7 @@
             <div class="input-group" *ngIf="segmentValue === 'income' || segmentValue === 'loan'">
                 <div class="clickable-input-wrapper" (click)="openIncomeSourceModal()">
                     <ion-input [label]="segmentValue === 'income' ? 'Income Source' : 'Loan Source'" label-placement="floating" fill="outline"
-                        formControlName="incomeSource" placeholder="Select Source" class="custom-input" readonly>
+                               formControlName="incomeSource" placeholder="Select Source" class="custom-input" readonly>
                         <ion-icon slot="start" name="briefcase-outline" aria-hidden="true"></ion-icon>
                         <ion-icon slot="end" name="chevron-down-outline" aria-hidden="true"></ion-icon>
                     </ion-input>
@@ -74,7 +74,7 @@
             <div class="input-group" *ngIf="segmentValue === 'expense'">
                 <div class="clickable-input-wrapper" (click)="openExpenseTypeModal()">
                     <ion-input label="Expense Type" label-placement="floating" fill="outline"
-                        formControlName="expenseType" placeholder="Select Type" class="custom-input" readonly>
+                               formControlName="expenseType" placeholder="Select Type" class="custom-input" readonly>
                         <ion-icon slot="start" name="cart-outline" aria-hidden="true"></ion-icon>
                         <ion-icon slot="end" name="chevron-down-outline" aria-hidden="true"></ion-icon>
                     </ion-input>
@@ -85,7 +85,7 @@
             <div class="input-group" *ngIf="segmentValue === 'expense' || segmentValue === 'transfer'">
                 <div class="clickable-input-wrapper" (click)="openFromWalletModal()">
                     <ion-input label="From Wallet" label-placement="floating" fill="outline"
-                        formControlName="fromWallet" placeholder="Select Wallet" class="custom-input" readonly>
+                               formControlName="fromWallet" placeholder="Select Wallet" class="custom-input" readonly>
                         <ion-icon slot="start" name="wallet-outline" aria-hidden="true"></ion-icon>
                         <ion-icon slot="end" name="chevron-down-outline" aria-hidden="true"></ion-icon>
                     </ion-input>
@@ -96,7 +96,7 @@
             <div class="input-group" *ngIf="segmentValue === 'income' || segmentValue === 'loan' || segmentValue === 'transfer'">
                 <div class="clickable-input-wrapper" (click)="openToWalletModal()">
                     <ion-input label="To Wallet" label-placement="floating" fill="outline" formControlName="toWallet"
-                        placeholder="Select Wallet" class="custom-input" readonly>
+                               placeholder="Select Wallet" class="custom-input" readonly>
                         <ion-icon slot="start" name="card-outline" aria-hidden="true"></ion-icon>
                         <ion-icon slot="end" name="chevron-down-outline" aria-hidden="true"></ion-icon>
                     </ion-input>
@@ -106,7 +106,7 @@
             <!-- Note -->
             <div class="input-group">
                 <ion-textarea label="Note" label-placement="floating" fill="outline" formControlName="note"
-                    placeholder="Enter transaction note..." [autoGrow]="true" class="custom-input">
+                              placeholder="Enter transaction note..." [autoGrow]="true" class="custom-input">
                     <ion-icon slot="start" name="create-outline" aria-hidden="true"></ion-icon>
                 </ion-textarea>
             </div>
@@ -121,8 +121,8 @@
 
             <div class="button-group ion-margin-top">
                 <ion-button expand="block"
-                    [color]="segmentValue === 'expense' ? 'danger' : (segmentValue === 'income' ? 'success' : (segmentValue === 'loan' ? 'warning' : 'primary'))"
-                    class="save-button" (click)="onSave()" [disabled]="!transactionForm.valid">
+                            [color]="segmentValue === 'expense' ? 'danger' : (segmentValue === 'income' ? 'success' : (segmentValue === 'loan' ? 'warning' : 'primary'))"
+                            class="save-button" (click)="onSave()" [disabled]="!transactionForm.valid">
                     <ion-icon name="add-circle-outline" slot="start"></ion-icon>
                     Save
                 </ion-button>
@@ -131,7 +131,7 @@
             <!-- Sub Expense Section (Expense only) -->
             <div class="sub-expense-section" *ngIf="segmentValue === 'expense' && isExpenseTypeSelected">
                 <ion-button expand="block" fill="clear" color="medium" class="add-sub-expense-btn"
-                    (click)="openSubExpenseModal()">
+                            (click)="openSubExpenseModal()">
                     <ion-icon name="add-outline" slot="start"></ion-icon>
                     Add Sub Expense
                 </ion-button>
@@ -142,12 +142,12 @@
                         <ion-icon name="list-outline"></ion-icon>
                         <ion-label>Sub Expenses</ion-label>
                         <ion-icon name="calculator-outline" style="margin-left: auto; cursor: pointer;"
-                            (click)="calculateTotal()"></ion-icon>
+                                  (click)="calculateTotal()"></ion-icon>
                     </div>
                     <div class="sub-expense-chip-container">
                         <div class="sub-expense-item-row" *ngFor="let se of activeSubExpenses">
                             <ion-icon name="trash-outline" color="danger" class="ion-margin-end"
-                                style="cursor: pointer;" (click)="removeSubExpense(se)"></ion-icon>
+                                      style="cursor: pointer;" (click)="removeSubExpense(se)"></ion-icon>
                             <span class="se-name">{{ se.name }}</span>
                             <span class="se-dots"></span>
                             <span class="se-amount">{{ se.amount | number:'1.2-2' }}</span>
@@ -164,14 +164,14 @@
     <ion-modal [isOpen]="isDateModalOpen" (didDismiss)="isDateModalOpen = false" class="date-modal">
         <ng-template>
             <ion-datetime presentation="date" preferWheel="false" [value]="transactionForm.get('date')?.value"
-                [showDefaultButtons]="true" (ionChange)="onDateChange($event)">
+                          [showDefaultButtons]="true" (ionChange)="onDateChange($event)">
             </ion-datetime>
         </ng-template>
     </ion-modal>
 
     <!-- Sub Expense Modal -->
     <ion-modal [isOpen]="isSubExpenseModalOpen" (didDismiss)="isSubExpenseModalOpen = false" [initialBreakpoint]="0.75"
-        [breakpoints]="[0, 0.75, 1]" handle="true" class="sub-expense-modal selection-modal">
+               [breakpoints]="[0, 0.75, 1]" handle="true" class="sub-expense-modal selection-modal">
         <ng-template>
             <ion-content class="ion-padding">
                 <div class="modal-header">
@@ -181,7 +181,7 @@
                     </ion-buttons>
                 </div>
                 <ion-searchbar placeholder="Search Sub Expense" (ionInput)="searchSubExpense($event)" mode="md"
-                    class="modal-searchbar"></ion-searchbar>
+                               class="modal-searchbar"></ion-searchbar>
 
                 <ion-list lines="none">
                     <ion-item *ngFor="let se of filteredSubExpenses">
@@ -197,14 +197,14 @@
 
     <!-- Income Source Modal -->
     <ion-modal [isOpen]="isIncomeSourceModalOpen" (didDismiss)="isIncomeSourceModalOpen = false"
-        [initialBreakpoint]="0.6" [breakpoints]="[0, 0.6, 0.8, 1]" handle="true" class="selection-modal">
+               [initialBreakpoint]="0.6" [breakpoints]="[0, 0.6, 0.8, 1]" handle="true" class="selection-modal">
         <ng-template>
             <ion-content class="ion-padding">
                 <div class="modal-header">
                     <h3>Select {{ segmentValue === 'income' ? 'Income' : 'Loan' }} Source</h3>
                 </div>
                 <ion-searchbar placeholder="Search Source" (ionInput)="searchIncomeSource($event)" mode="md"
-                    class="modal-searchbar"></ion-searchbar>
+                               class="modal-searchbar"></ion-searchbar>
 
                 <ion-button expand="block" fill="clear" color="medium" class="add-new-income-source-btn" (click)="addNewIncomeSource()">
                     <ion-icon name="add-outline" slot="start"></ion-icon>
@@ -215,7 +215,7 @@
                     <ion-row>
                         <ion-col size="3" *ngFor="let source of filteredIncomeSources">
                             <div class="grid-selection-item" (click)="selectIncomeSource(source)"
-                                [class.selected]="transactionForm.get('incomeSource')?.value === source">
+                                 [class.selected]="transactionForm.get('incomeSource')?.value === source">
                                 <div class="icon-circle">
                                     <ion-icon name="briefcase-outline"></ion-icon>
                                 </div>
@@ -230,14 +230,14 @@
 
     <!-- Expense Type Modal -->
     <ion-modal [isOpen]="isExpenseTypeModalOpen" (didDismiss)="isExpenseTypeModalOpen = false" [initialBreakpoint]="0.6"
-        [breakpoints]="[0, 0.6, 0.8, 1]" handle="true" class="selection-modal">
+               [breakpoints]="[0, 0.6, 0.8, 1]" handle="true" class="selection-modal">
         <ng-template>
             <ion-content class="ion-padding">
                 <div class="modal-header">
                     <h3>Select Expense Type</h3>
                 </div>
                 <ion-searchbar placeholder="Search Type" (ionInput)="searchExpenseType($event)" mode="md"
-                    class="modal-searchbar"></ion-searchbar>
+                               class="modal-searchbar"></ion-searchbar>
 
                 <ion-button expand="block" fill="clear" color="medium" class="add-new-expense-type-btn" (click)="addNewExpenseType()">
                     <ion-icon name="add-outline" slot="start"></ion-icon>
@@ -248,7 +248,7 @@
                     <ion-row>
                         <ion-col size="3" *ngFor="let type of filteredExpenseTypes">
                             <div class="grid-selection-item" (click)="selectExpenseType(type)"
-                                [class.selected]="transactionForm.get('expenseType')?.value === type">
+                                 [class.selected]="transactionForm.get('expenseType')?.value === type">
                                 <div class="icon-circle">
                                     <ion-icon name="cart-outline"></ion-icon>
                                 </div>
@@ -263,14 +263,14 @@
 
     <!-- From Wallet Modal -->
     <ion-modal [isOpen]="isFromWalletModalOpen" (didDismiss)="isFromWalletModalOpen = false" [initialBreakpoint]="0.6"
-        [breakpoints]="[0, 0.6, 0.8, 1]" handle="true" class="selection-modal">
+               [breakpoints]="[0, 0.6, 0.8, 1]" handle="true" class="selection-modal">
         <ng-template>
             <ion-content class="ion-padding">
                 <div class="modal-header">
                     <h3>Select From Wallet</h3>
                 </div>
                 <ion-searchbar placeholder="Search Wallet" (ionInput)="searchWallet($event)" mode="md"
-                    class="modal-searchbar"></ion-searchbar>
+                               class="modal-searchbar"></ion-searchbar>
 
                 <ion-button expand="block" fill="clear" color="medium" class="add-new-wallet-btn" (click)="addNewWallet()">
                     <ion-icon name="add-outline" slot="start"></ion-icon>
@@ -281,7 +281,7 @@
                     <ion-row>
                         <ion-col size="3" *ngFor="let wallet of filteredWallets">
                             <div class="grid-selection-item" (click)="selectFromWallet(wallet)"
-                                [class.selected]="transactionForm.get('fromWallet')?.value === wallet">
+                                 [class.selected]="transactionForm.get('fromWallet')?.value === wallet">
                                 <div class="icon-circle">
                                     <ion-icon name="wallet-outline"></ion-icon>
                                 </div>
@@ -296,14 +296,14 @@
 
     <!-- To Wallet Modal -->
     <ion-modal [isOpen]="isToWalletModalOpen" (didDismiss)="isToWalletModalOpen = false" [initialBreakpoint]="0.5"
-        [breakpoints]="[0, 0.5, 0.8, 1]" handle="true" class="selection-modal">
+               [breakpoints]="[0, 0.5, 0.8, 1]" handle="true" class="selection-modal">
         <ng-template>
             <ion-content class="ion-padding">
                 <div class="modal-header">
                     <h3>Select To Wallet</h3>
                 </div>
                 <ion-searchbar placeholder="Search Wallet" (ionInput)="searchWallet($event)" mode="md"
-                    class="modal-searchbar"></ion-searchbar>
+                               class="modal-searchbar"></ion-searchbar>
 
                 <ion-button expand="block" fill="clear" color="medium" class="add-new-wallet-btn" (click)="addNewWallet()">
                     <ion-icon name="add-outline" slot="start"></ion-icon>
@@ -314,7 +314,7 @@
                     <ion-row>
                         <ion-col size="3" *ngFor="let wallet of filteredWallets">
                             <div class="grid-selection-item" (click)="selectToWallet(wallet)"
-                                [class.selected]="transactionForm.get('toWallet')?.value === wallet">
+                                 [class.selected]="transactionForm.get('toWallet')?.value === wallet">
                                 <div class="icon-circle">
                                     <ion-icon name="card-outline"></ion-icon>
                                 </div>

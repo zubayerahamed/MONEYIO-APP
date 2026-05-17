@@ -1,0 +1,50 @@
+<ion-header [translucent]="true">
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-menu-button></ion-menu-button>
+        </ion-buttons>
+        <ion-title>Settings</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+    <ion-list lines="full">
+        <ion-list-header>
+            <ion-label>Appearance</ion-label>
+        </ion-list-header>
+
+        <ion-item lines="none">
+            <ion-icon slot="start" name="color-palette-outline" color="primary"></ion-icon>
+            <ion-label>
+                <h2>Theme Mode</h2>
+                <p>Choose your preferred app theme</p>
+            </ion-label>
+        </ion-item>
+
+        <ion-radio-group [value]="currentTheme" (ionChange)="themeChanged($event)">
+            <ion-item>
+                <ion-icon slot="start" name="sunny-outline"></ion-icon>
+                <ion-label>Light Mode</ion-label>
+                <ion-radio slot="end" value="light"></ion-radio>
+            </ion-item>
+
+            <ion-item>
+                <ion-icon slot="start" name="moon-outline"></ion-icon>
+                <ion-label>Dark Mode</ion-label>
+                <ion-radio slot="end" value="dark"></ion-radio>
+            </ion-item>
+
+            <ion-item>
+                <ion-icon slot="start" name="desktop-outline"></ion-icon>
+                <ion-label>System Default</ion-label>
+                <ion-radio slot="end" value="system"></ion-radio>
+            </ion-item>
+        </ion-radio-group>
+    </ion-list>
+
+    <div class="ion-padding">
+        <ion-note color="medium">
+            System default will automatically switch between light and dark themes based on your device settings.
+        </ion-note>
+    </div>
+</ion-content>

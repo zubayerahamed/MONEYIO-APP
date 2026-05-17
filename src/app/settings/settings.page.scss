@@ -1,0 +1,44 @@
+ion-list-header {
+    margin-top: 10px;
+    ion-label {
+        font-size: 0.9rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--ion-color-primary);
+    }
+}
+
+ion-item {
+    --padding-start: 16px;
+    
+    ion-icon {
+        font-size: 1.4rem;
+        margin-right: 16px;
+    }
+
+    h2 {
+        font-weight: 600;
+        margin-bottom: 4px;
+    }
+
+    p {
+        font-size: 0.85rem;
+    }
+}
+
+ion-radio-group {
+    ion-item {
+        --min-height: 56px;
+        
+        ion-icon {
+            font-size: 1.2rem;
+            color: var(--ion-color-medium);
+        }
+
+        ion-label {
+            font-size: 1rem;
+            color: var(--ion-color-dark);
+        }
+    }
+}

@@ -1,0 +1,57 @@
+<ion-content class="ion-padding">
+  <div class="modal-header">
+    <h3>{{ title }}</h3>
+    <ion-buttons>
+      <ion-button (click)="dismiss()">
+        <ion-icon name="close-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </div>
+
+  <form [formGroup]="walletForm" (ngSubmit)="save()" class="form-container">
+    <div class="input-group">
+      <ion-input
+        label="Wallet Name"
+        label-placement="floating"
+        fill="outline"
+        formControlName="name"
+        placeholder="e.g. Cash, Bank Account"
+        class="custom-input"
+        autofocus="true"
+      >
+        <ion-icon slot="start" name="wallet-outline" aria-hidden="true"></ion-icon>
+      </ion-input>
+    </div>
+
+    <div class="input-group">
+      <ion-input
+        label="Opening Balance"
+        label-placement="floating"
+        fill="outline"
+        type="number"
+        formControlName="openingBalance"
+        placeholder="0.00"
+        inputmode="decimal"
+        class="custom-input"
+      >
+        <ion-icon slot="start" name="cash-outline" aria-hidden="true"></ion-icon>
+      </ion-input>
+    </div>
+
+    <ion-item lines="none" class="checkbox-item">
+      <ion-checkbox formControlName="isExcluded" labelPlacement="end">
+        <ion-label>
+          Exclude from Total
+          <p>Don't count this wallet in total balance</p>
+        </ion-label>
+      </ion-checkbox>
+    </ion-item>
+
+    <div class="button-group">
+      <ion-button expand="block" type="submit" [disabled]="!walletForm.valid" class="save-button">
+        <ion-icon name="save-outline" slot="start"></ion-icon>
+        Save Wallet
+      </ion-button>
+    </div>
+  </form>
+</ion-content>

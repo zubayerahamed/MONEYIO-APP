@@ -17,11 +17,13 @@ import {
     IonMenuButton,
     IonNote,
     IonTitle,
-    IonToolbar
+    IonToolbar,
+    ModalController
 } from '@ionic/angular/standalone';
 import { Chart, registerables } from 'chart.js';
 import { addIcons } from 'ionicons';
 import { add, eye, eyeOff, pencil, trash } from 'ionicons/icons';
+import { WalletModalComponent } from '../modals/wallet-modal/wallet-modal.component';
 
 Chart.register(...registerables);
 
@@ -78,7 +80,7 @@ export class AccountPage implements OnInit, AfterViewInit {
     totalChart: any;
     excludedChart: any;
 
-    constructor() {
+    constructor(private modalCtrl: ModalController) {
         addIcons({ add, eyeOff, eye, pencil, trash });
     }
 
@@ -101,6 +103,9 @@ export class AccountPage implements OnInit, AfterViewInit {
     }
 
     initCharts() {
+        if (this.totalChart) this.totalChart.destroy();
+        if (this.excludedChart) this.excludedChart.destroy();
+
         const includedAccounts = this.accounts.filter(a => !a.isExcluded);
         const excludedAccounts = this.accounts.filter(a => a.isExcluded);
 
@@ -148,23 +153,78 @@ export class AccountPage implements OnInit, AfterViewInit {
         });
     }
 
-    addAccount() {
-        console.log('Add account');
+    async addAccount() {
+        const modal = await this.modalCtrl.create({
+            component: WalletModalComponent,
+            initialBreakpoint: 0.6,
+            breakpoints: [0, 0.6],
+            handle: true,
+            cssClass: 'selection-modal'
+        });
+        await modal.present();
+
+        const { data } = await modal.onWillDismiss();
+        if (data) {
+            const newAccount: Account = {
+                id: Date.now().toString(),
+                name: data.name,
+                balance: data.openingBalance,
+                isExcluded: data.isExcluded,
+                color: this.getRandomColor()
+            };
+            this.accounts.push(newAccount);
+            this.updateUI();
+        }
+    }
+
+    async editAccount(account: Account) {
+        const modal = await this.modalCtrl.create({
+            component: WalletModalComponent,
+            componentProps: { wallet: account },
+            initialBreakpoint: 0.6,
+            breakpoints: [0, 0.6],
+            handle: true,
+            cssClass: 'selection-modal'
+        });
+        await modal.present();
+
+        const { data } = await modal.onWillDismiss();
+        if (data) {
+            const index = this.accounts.findIndex(a => a.id === account.id);
+            if (index !== -1) {
+                this.accounts[index] = {
+                    ...account,
+                    name: data.name,
+                    balance: data.openingBalance,
+                    isExcluded: data.isExcluded
+                };
+                this.updateUI();
+            }
+        }
+    }
+
+    private updateUI() {
+        this.calculateTotals();
+        setTimeout(() => this.initCharts(), 0);
+    }
+
+    private getRandomColor() {
+        const colors = ['#2dd36f', '#3880ff', '#eb445a', '#ffc409', '#92949c', '#5260ff', '#3dc2ff', '#5260ff', '#2fdf75', '#ffd534'];
+        return colors[Math.floor(Math.random() * colors.length)];
     }
 
     excludeAccount(account: Account) {
-        console.log('Exclude account');
+        account.isExcluded = true;
+        this.updateUI();
     }
 
     includeAccount(account: Account) {
-        console.log('Include account');
-    }
-
-    editAccount(account: Account) {
-        console.log('Edit account');
+        account.isExcluded = false;
+        this.updateUI();
     }
 
     deleteAccount(account: Account) {
-        console.log('Delete account');
+        this.accounts = this.accounts.filter(a => a.id !== account.id);
+        this.updateUI();
     }
 }

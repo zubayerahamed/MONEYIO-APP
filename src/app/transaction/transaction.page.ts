@@ -29,6 +29,7 @@ import { addIcons } from 'ionicons';
 import { addCircleOutline, addOutline, arrowForwardOutline, briefcaseOutline, calculatorOutline, calendarOutline, cameraOutline, cardOutline, cartOutline, cashOutline, chevronDownOutline, closeOutline, createOutline, listOutline, searchOutline, trashOutline, walletOutline } from 'ionicons/icons';
 import { DataService } from '../services/data.service';
 import { CategoryModalComponent } from '../modals/category-modal/category-modal.component';
+import { WalletModalComponent } from '../modals/wallet-modal/wallet-modal.component';
 import { Subscription } from 'rxjs';
 
 interface SubExpense {
@@ -213,7 +214,11 @@ export class TransactionPage implements OnInit, OnDestroy {
         const title = this.segmentValue === 'income' ? 'Add Income Source' : 'Add Loan Source';
         const modal = await this.modalCtrl.create({
             component: CategoryModalComponent,
-            componentProps: { title: title }
+            componentProps: { title: title },
+            initialBreakpoint: 0.4,
+            breakpoints: [0, 0.4],
+            handle: true,
+            cssClass: 'selection-modal'
         });
         await modal.present();
         const { data } = await modal.onWillDismiss();
@@ -226,7 +231,11 @@ export class TransactionPage implements OnInit, OnDestroy {
     async addNewExpenseType() {
         const modal = await this.modalCtrl.create({
             component: CategoryModalComponent,
-            componentProps: { title: 'Add Expense Type' }
+            componentProps: { title: 'Add Expense Type' },
+            initialBreakpoint: 0.4,
+            breakpoints: [0, 0.4],
+            handle: true,
+            cssClass: 'selection-modal'
         });
         await modal.present();
         const { data } = await modal.onWillDismiss();
@@ -238,17 +247,21 @@ export class TransactionPage implements OnInit, OnDestroy {
 
     async addNewWallet() {
         const modal = await this.modalCtrl.create({
-            component: CategoryModalComponent,
-            componentProps: { title: 'Add New Wallet' }
+            component: WalletModalComponent,
+            componentProps: { title: 'Add New Wallet' },
+            initialBreakpoint: 0.6,
+            breakpoints: [0, 0.6],
+            handle: true,
+            cssClass: 'selection-modal'
         });
         await modal.present();
         const { data } = await modal.onWillDismiss();
-        if (data) {
-            this.dataService.addWallet(data);
+        if (data && data.name) {
+            this.dataService.addWallet(data.name);
             if (this.isFromWalletModalOpen) {
-                this.selectFromWallet(data);
+                this.selectFromWallet(data.name);
             } else if (this.isToWalletModalOpen) {
-                this.selectToWallet(data);
+                this.selectToWallet(data.name);
             }
         }
     }

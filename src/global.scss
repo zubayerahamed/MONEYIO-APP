@@ -33,7 +33,7 @@
  */
 
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
-/* @import "@ionic/angular/css/palettes/dark.class.css"; */
+@import "@ionic/angular/css/palettes/dark.class.css";
 @import '@ionic/angular/css/palettes/dark.system.css';
 
 :root {
@@ -42,4 +42,78 @@
 
 * {
   font-family: 'Poppins', sans-serif;
+}
+
+.date-modal {
+  --height: fit-content;
+  --width: fit-content;
+  --border-radius: 16px;
+  --box-shadow: 0 28px 48px rgba(0, 0, 0, 0.4);
+}
+
+.selection-modal,
+.sub-expense-modal {
+  --border-radius: 16px 16px 0 0;
+  --box-shadow: 0 28px 48px rgba(0, 0, 0, 0.4);
+
+  .modal-header {
+      padding: 16px 16px 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+
+      h3 {
+          margin: 0;
+          font-size: 1.2rem;
+          font-weight: 600;
+          color: var(--ion-color-dark);
+      }
+
+      ion-buttons {
+          position: absolute;
+          right: 16px;
+      }
+  }
+
+  .modal-searchbar {
+      padding-left: 16px;
+      padding-right: 16px;
+      --border-radius: 12px;
+      --box-shadow: none;
+      --background: rgba(var(--ion-text-color-rgb, 0, 0, 0), 0.06);
+      margin-bottom: 8px;
+  }
+
+  ion-content {
+      --background: var(--ion-background-color);
+  }
+}
+
+.sub-expense-modal {
+  ion-item {
+      --padding-start: 16px;
+      --inner-padding-end: 16px;
+      margin-bottom: 8px;
+      --background: transparent;
+
+      ion-label {
+          font-weight: 500;
+          color: var(--ion-color-dark);
+          margin-bottom: 4px;
+      }
+
+      ion-input {
+          --background: rgba(var(--ion-text-color-rgb, 0, 0, 0), 0.06);
+          --border-radius: 8px;
+          --padding-start: 12px;
+          --padding-end: 12px;
+          margin-top: 4px;
+
+          ion-icon {
+              margin-right: 8px;
+              color: var(--ion-color-medium);
+          }
+      }
+  }
 }

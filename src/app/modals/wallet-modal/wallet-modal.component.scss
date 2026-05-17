@@ -1,0 +1,70 @@
+.form-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-top: 10px;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.custom-input {
+  --border-radius: 12px;
+  --highlight-color-focused: var(--ion-color-primary);
+  --border-color: var(--ion-color-step-300, #d7d8da);
+  margin-bottom: 0;
+
+  &.ios,
+  &.md {
+    --padding-start: 16px;
+    --padding-end: 16px;
+  }
+
+  ion-icon {
+    color: var(--ion-color-medium);
+    margin-right: 12px;
+  }
+}
+
+.checkbox-item {
+  --background: transparent;
+  --padding-start: 0;
+  --inner-padding-end: 0;
+  margin-top: 8px;
+
+  ion-checkbox {
+    --size: 20px;
+    --border-radius: 6px;
+    --checkbox-background-checked: var(--ion-color-primary);
+    
+    ion-label {
+      margin-left: 12px;
+      font-weight: 500;
+      
+      p {
+        margin-top: 4px;
+        font-size: 0.8rem;
+        color: var(--ion-color-medium);
+      }
+    }
+  }
+}
+
+.button-group {
+  margin-top: 16px;
+
+  ion-button {
+    height: 52px;
+    --border-radius: 12px;
+    font-weight: 600;
+    margin: 0;
+  }
+
+  .save-button {
+    --box-shadow: 0 4px 12px rgba(var(--ion-color-primary-rgb), 0.3);
+  }
+}

@@ -5,11 +5,8 @@ import {
   IonButton,
   IonButtons,
   IonContent,
-  IonHeader,
   IonIcon,
   IonInput,
-  IonTitle,
-  IonToolbar,
   ModalController
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
@@ -23,9 +20,6 @@ import { closeOutline, createOutline, saveOutline } from 'ionicons/icons';
   imports: [
     CommonModule,
     FormsModule,
-    IonHeader,
-    IonToolbar,
-    IonTitle,
     IonContent,
     IonButtons,
     IonButton,
@@ -35,13 +29,17 @@ import { closeOutline, createOutline, saveOutline } from 'ionicons/icons';
 })
 export class CategoryModalComponent implements OnInit {
   @Input() title: string = 'Add New';
-  categoryName: string = '';
+  @Input() categoryName: string = '';
 
   constructor(private modalCtrl: ModalController) {
     addIcons({ closeOutline, saveOutline, createOutline });
   }
 
-  ngOnInit() { }
+  ngOnInit() {
+    if (this.categoryName) {
+      this.title = this.title.includes('Edit') ? this.title : 'Edit ' + this.title;
+    }
+  }
 
   dismiss() {
     this.modalCtrl.dismiss();

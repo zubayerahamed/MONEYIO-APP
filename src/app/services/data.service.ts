@@ -40,6 +40,34 @@ export class DataService {
     }
   }
 
+  updateIncomeSource(oldSource: string, newSource: string) {
+    const current = this.incomeSourcesSubject.value;
+    const index = current.indexOf(oldSource);
+    if (index !== -1) {
+      current[index] = newSource;
+      this.incomeSourcesSubject.next([...current]);
+    }
+  }
+
+  deleteIncomeSource(source: string) {
+    const current = this.incomeSourcesSubject.value;
+    this.incomeSourcesSubject.next(current.filter(s => s !== source));
+  }
+
+  updateExpenseType(oldType: string, newType: string) {
+    const current = this.expenseTypesSubject.value;
+    const index = current.indexOf(oldType);
+    if (index !== -1) {
+      current[index] = newType;
+      this.expenseTypesSubject.next([...current]);
+    }
+  }
+
+  deleteExpenseType(type: string) {
+    const current = this.expenseTypesSubject.value;
+    this.expenseTypesSubject.next(current.filter(t => t !== type));
+  }
+
   addWallet(wallet: string) {
     const current = this.walletsSubject.value;
     if (!current.includes(wallet)) {

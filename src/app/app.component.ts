@@ -25,7 +25,8 @@ import {
     settingsOutline,
     logOutOutline,
     walletOutline,
-    pieChartOutline
+    pieChartOutline,
+    listOutline
 } from 'ionicons/icons';
 import { CommonModule } from '@angular/common';
 
@@ -61,6 +62,7 @@ export class AppComponent {
         { title: 'Transactions', url: '/tabs/transaction', icon: 'wallet-outline' },
         { title: 'Status', url: '/tabs/status', icon: 'pie-chart-outline' },
         { title: 'Account', url: '/tabs/account', icon: 'person-outline' },
+        { title: 'Categories', url: '/category', icon: 'list-outline' },
         { title: 'Settings', url: '/settings', icon: 'settings-outline' },
     ];
 
@@ -74,7 +76,8 @@ export class AppComponent {
             settingsOutline,
             logOutOutline,
             walletOutline,
-            pieChartOutline
+            pieChartOutline,
+            listOutline
         });
     }
 
