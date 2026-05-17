@@ -1,4 +1,4 @@
-<ion-header [translucent]="true">
+<ion-header>
     <ion-toolbar>
         <ion-buttons slot="start">
             <ion-menu-button></ion-menu-button>
@@ -8,44 +8,56 @@
         </ion-title>
     </ion-toolbar>
 
-    <div class="single-row-segment-container">
-        <ion-segment [value]="segmentValue" (ionChange)="segmentChanged($event)" mode="ios"
-                     [class.income-theme]="segmentValue === 'income'"
-                     [class.expense-theme]="segmentValue === 'expense'"
-                     [class.loan-theme]="segmentValue === 'loan'"
-                     [class.transfer-theme]="segmentValue === 'transfer'">
-            <ion-segment-button value="income">
-                <ion-label>Income</ion-label>
-            </ion-segment-button>
-            <ion-segment-button value="expense">
-                <ion-label>Expense</ion-label>
-            </ion-segment-button>
-            <ion-segment-button value="loan">
-                <ion-label>Loan</ion-label>
-            </ion-segment-button>
-            <ion-segment-button value="transfer">
-                <ion-label>Transfer</ion-label>
-            </ion-segment-button>
-        </ion-segment>
+    <ion-toolbar>
+        <div class="segment-wrapper">
+            <ion-segment [value]="segmentValue" (ionChange)="segmentChanged($event)" mode="ios"
+                         [class.income-theme]="segmentValue === 'income'"
+                         [class.expense-theme]="segmentValue === 'expense'"
+                         [class.loan-theme]="segmentValue === 'loan'"
+                         [class.transfer-theme]="segmentValue === 'transfer'">
+                <ion-segment-button value="income">
+                    <ion-label>Income</ion-label>
+                </ion-segment-button>
+                <ion-segment-button value="expense">
+                    <ion-label>Expense</ion-label>
+                </ion-segment-button>
+                <ion-segment-button value="loan">
+                    <ion-label>Loan</ion-label>
+                </ion-segment-button>
+                <ion-segment-button value="transfer">
+                    <ion-label>Transfer</ion-label>
+                </ion-segment-button>
+            </ion-segment>
+        </div>
+    </ion-toolbar>
 
-        <ion-segment *ngIf="segmentValue === 'loan'" [value]="loanSegmentValue" (ionChange)="loanSegmentChanged($event)" mode="ios"
-                     class="loan-sub-segment"
-                     [class.income-theme]="loanSegmentValue === 'receive'"
-                     [class.expense-theme]="loanSegmentValue === 'pay'">
-            <ion-segment-button value="receive">
-                <ion-label>Receive</ion-label>
-            </ion-segment-button>
-            <ion-segment-button value="pay">
-                <ion-label>Pay</ion-label>
-            </ion-segment-button>
-        </ion-segment>
-    </div>
+    <ion-toolbar *ngIf="segmentValue === 'loan'">
+        <div class="segment-wrapper">
+            <ion-segment [value]="loanSegmentValue" (ionChange)="loanSegmentChanged($event)" mode="ios"
+                         class="loan-sub-segment"
+                         [class.income-theme]="loanSegmentValue === 'taken' || loanSegmentValue === 'repaid-to-me'"
+                         [class.expense-theme]="loanSegmentValue === 'given' || loanSegmentValue === 'repaid-by-me'">
+                <ion-segment-button value="given">
+                    <ion-label>Given</ion-label>
+                </ion-segment-button>
+                <ion-segment-button value="repaid-to-me">
+                    <ion-label>Repaid to me</ion-label>
+                </ion-segment-button>
+                <ion-segment-button value="taken">
+                    <ion-label>Taken</ion-label>
+                </ion-segment-button>
+                <ion-segment-button value="repaid-by-me">
+                    <ion-label>Repaid by me</ion-label>
+                </ion-segment-button>
+            </ion-segment>
+        </div>
+    </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true" class="ion-padding">
     <form [formGroup]="transactionForm" class="transaction-form"
-          [class.expense-mode]="segmentValue === 'expense' || (segmentValue === 'loan' && loanSegmentValue === 'pay')"
-          [class.income-mode]="segmentValue === 'income' || (segmentValue === 'loan' && loanSegmentValue === 'receive')"
+          [class.expense-mode]="segmentValue === 'expense' || (segmentValue === 'loan' && (loanSegmentValue === 'given' || loanSegmentValue === 'repaid-by-me'))"
+          [class.income-mode]="segmentValue === 'income' || (segmentValue === 'loan' && (loanSegmentValue === 'taken' || loanSegmentValue === 'repaid-to-me'))"
           [class.loan-mode]="segmentValue === 'loan'">
         <div class="form-container">
             <!-- Date & Camera -->
@@ -58,7 +70,7 @@
                 </div>
 
                 <ion-button fill="outline" (click)="openCamera($event)" class="external-camera-btn"
-                            [color]="(segmentValue === 'expense' || (segmentValue === 'loan' && loanSegmentValue === 'pay')) ? 'danger' : ((segmentValue === 'income' || (segmentValue === 'loan' && loanSegmentValue === 'receive')) ? 'success' : 'primary')">
+                            [color]="(segmentValue === 'expense' || (segmentValue === 'loan' && (loanSegmentValue === 'given' || loanSegmentValue === 'repaid-by-me'))) ? 'danger' : ((segmentValue === 'income' || (segmentValue === 'loan' && (loanSegmentValue === 'taken' || loanSegmentValue === 'repaid-to-me'))) ? 'success' : 'primary')">
                     <ion-icon name="camera-outline" aria-hidden="true"></ion-icon>
                 </ion-button>
             </div>
@@ -93,8 +105,8 @@
                 </div>
             </div>
 
-            <!-- From Wallet (Expense, Transfer, and Loan Pay) -->
-            <div class="input-group" *ngIf="segmentValue === 'expense' || segmentValue === 'transfer' || (segmentValue === 'loan' && loanSegmentValue === 'pay')">
+            <!-- From Wallet (Expense, Transfer, and Loan Outflow) -->
+            <div class="input-group" *ngIf="segmentValue === 'expense' || segmentValue === 'transfer' || (segmentValue === 'loan' && (loanSegmentValue === 'given' || loanSegmentValue === 'repaid-by-me'))">
                 <div class="clickable-input-wrapper" (click)="openFromWalletModal()">
                     <ion-input label="From Wallet" label-placement="floating" fill="outline"
                                formControlName="fromWallet" placeholder="Select Wallet" class="custom-input" readonly>
@@ -104,8 +116,8 @@
                 </div>
             </div>
 
-            <!-- To Wallet (Income, Transfer, and Loan Receive) -->
-            <div class="input-group" *ngIf="segmentValue === 'income' || segmentValue === 'transfer' || (segmentValue === 'loan' && loanSegmentValue === 'receive')">
+            <!-- To Wallet (Income, Transfer, and Loan Inflow) -->
+            <div class="input-group" *ngIf="segmentValue === 'income' || segmentValue === 'transfer' || (segmentValue === 'loan' && (loanSegmentValue === 'taken' || loanSegmentValue === 'repaid-to-me'))">
                 <div class="clickable-input-wrapper" (click)="openToWalletModal()">
                     <ion-input label="To Wallet" label-placement="floating" fill="outline" formControlName="toWallet"
                                placeholder="Select Wallet" class="custom-input" readonly>
@@ -169,8 +181,6 @@
             </div>
         </div>
     </form>
-
-    <!-- Modals moved out of the form to avoid styling conflicts -->
 
     <!-- Date Modal -->
     <ion-modal [isOpen]="isDateModalOpen" (didDismiss)="isDateModalOpen = false" class="date-modal">

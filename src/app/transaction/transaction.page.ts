@@ -75,7 +75,7 @@ export class TransactionPage implements OnInit, OnDestroy {
 
     transactionForm: FormGroup;
     segmentValue: string = 'expense';
-    loanSegmentValue: string = 'receive';
+    loanSegmentValue: string = 'given';
     isDateModalOpen = false;
     isIncomeSourceModalOpen = false;
     isExpenseTypeModalOpen = false;
@@ -174,7 +174,9 @@ export class TransactionPage implements OnInit, OnDestroy {
 
     ionViewDidEnter() {
         setTimeout(() => {
-            this.amountInput.setFocus();
+            if (this.amountInput) {
+                this.amountInput.setFocus();
+            }
         }, 400);
     }
 
@@ -205,9 +207,9 @@ export class TransactionPage implements OnInit, OnDestroy {
             toWalletControl?.setValidators([Validators.required]);
         } else if (this.segmentValue === 'loan') {
             incomeSourceControl?.setValidators([Validators.required]);
-            if (this.loanSegmentValue === 'receive') {
+            if (this.loanSegmentValue === 'taken' || this.loanSegmentValue === 'repaid-to-me') {
                 toWalletControl?.setValidators([Validators.required]);
-            } else {
+            } else if (this.loanSegmentValue === 'given' || this.loanSegmentValue === 'repaid-by-me') {
                 fromWalletControl?.setValidators([Validators.required]);
             }
         } else if (this.segmentValue === 'expense') {
@@ -300,19 +302,27 @@ export class TransactionPage implements OnInit, OnDestroy {
     }
 
     async openCamera(event: Event) {
-        event.stopPropagation();
+        if (event) {
+            event.stopPropagation();
+        }
         
         try {
             const image = await Camera.getPhoto({
                 quality: 90,
                 allowEditing: false,
                 resultType: CameraResultType.DataUrl,
-                source: CameraSource.Camera // Or Prompt to let user choose between camera and gallery
+                source: CameraSource.Prompt // Maximum stability across all platforms
             });
 
-            this.capturedImage = image.dataUrl || null;
-        } catch (error) {
+            if (image && image.dataUrl) {
+                this.capturedImage = image.dataUrl;
+            }
+        } catch (error: any) {
             console.error('Camera error:', error);
+            if (error?.message?.toLowerCase().includes('cancel') || error?.message?.toLowerCase().includes('user closed')) {
+                return;
+            }
+            alert('Camera could not be opened. Please check permissions.');
         }
     }
 

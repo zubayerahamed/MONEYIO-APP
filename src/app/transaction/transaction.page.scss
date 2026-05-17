@@ -9,11 +9,6 @@
     }
 }
 
-.loan-sub-segment {
-    margin-top: 12px !important;
-    --background: rgba(var(--ion-text-color-rgb, 0, 0, 0), 0.04);
-}
-
 .grid-selection-item {
     display: flex;
     flex-direction: column;
@@ -337,9 +332,14 @@
     }
 }
 
-.single-row-segment-container {
-    padding: 0 16px 12px;
+ion-toolbar {
+    --padding-top: 4px;
+    --padding-bottom: 8px;
+    --padding-start: 16px;
+    --padding-end: 16px;
+}
 
+.segment-wrapper {
     ion-segment {
         --background: rgba(var(--ion-text-color-rgb, 0, 0, 0), 0.06);
         --border-radius: 10px;
@@ -385,5 +385,9 @@
             --background-checked: var(--ion-color-primary);
             background: var(--ion-color-primary);
         }
+    }
+
+    .loan-sub-segment {
+        margin-top: 0 !important;
     }
 }

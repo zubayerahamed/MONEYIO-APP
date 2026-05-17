@@ -48,9 +48,10 @@
     </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" [scrollY]="false">
+<ion-content [fullscreen]="true" [scrollY]="true">
     <div class="status-container">
-        <div class="chart-section ion-padding-horizontal ion-padding-top">
+        <!-- Chart Section (Income & Expense only) -->
+        <div class="chart-section ion-padding-horizontal ion-padding-top" *ngIf="statusType !== 'loan'">
             <ion-card class="main-chart-card">
                 <ion-card-content>
                     <div class="donut-wrapper">
@@ -64,16 +65,51 @@
             </ion-card>
         </div>
 
+        <!-- Loan Summary Section (Loan only) -->
+        <div class="loan-summary-section ion-padding-horizontal ion-padding-top" *ngIf="statusType === 'loan'">
+            <ion-grid>
+                <ion-row>
+                    <ion-col size="6" *ngFor="let item of loanSummaryCards" class="ion-no-padding">
+                        <ion-card class="summary-card" 
+                                  [class.inflow]="item.type === 'taken' || item.type === 'repaid-to-me'" 
+                                  [class.outflow]="item.type === 'given' || item.type === 'repaid-by-me'">
+                            <ion-card-content>
+                                <div class="summary-icon-wrapper">
+                                    <ion-icon [name]="item.icon"></ion-icon>
+                                </div>
+                                <div class="summary-info">
+                                    <div class="summary-label">{{ item.label }}</div>
+                                    <div class="summary-amount">${{ item.amount | number:'1.2-2' }}</div>
+                                </div>
+                            </ion-card-content>
+                        </ion-card>
+                    </ion-col>
+                </ion-row>
+            </ion-grid>
+        </div>
+
         <div class="list-section ion-padding-horizontal">
             <ion-list lines="full" class="data-list">
                 <ion-item *ngFor="let item of currentData">
                     <div class="color-dot" [style.background-color]="item.color" slot="start"></div>
-                    <ion-label>
+                    
+                    <!-- Standard Label (Income/Expense) -->
+                    <ion-label *ngIf="statusType !== 'loan'">
                         <h2>{{ item.label }}</h2>
                         <p>{{ (item.amount / totalAmount * 100) | number:'1.1-1' }}%</p>
                     </ion-label>
-                    <ion-text slot="end" [color]="statusType === 'income' ? 'success' : (statusType === 'expense' ? 'danger' : 'primary')">
-                        <span class="item-amount">${{ item.amount | number:'1.2-2' }}</span>
+
+                    <!-- Combined Label (Loan) -->
+                    <ion-label *ngIf="statusType === 'loan'">
+                        <h2>{{ item.source }}</h2>
+                        <p *ngFor="let detail of getLoanDetails(item)">{{ detail }}</p>
+                    </ion-label>
+
+                    <ion-text slot="end" [color]="getItemColor(item)">
+                        <span class="item-amount" *ngIf="statusType !== 'loan'">${{ item.amount | number:'1.2-2' }}</span>
+                        <span class="item-amount" *ngIf="statusType === 'loan'">
+                            ${{ getLoanBalance(item) | number:'1.2-2' }}
+                        </span>
                     </ion-text>
                 </ion-item>
             </ion-list>
