@@ -31,6 +31,7 @@ import { DataService } from '../services/data.service';
 import { CategoryModalComponent } from '../modals/category-modal/category-modal.component';
 import { WalletModalComponent } from '../modals/wallet-modal/wallet-modal.component';
 import { Subscription } from 'rxjs';
+import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 
 interface SubExpense {
     name: string;
@@ -74,6 +75,7 @@ export class TransactionPage implements OnInit, OnDestroy {
 
     transactionForm: FormGroup;
     segmentValue: string = 'expense';
+    loanSegmentValue: string = 'receive';
     isDateModalOpen = false;
     isIncomeSourceModalOpen = false;
     isExpenseTypeModalOpen = false;
@@ -181,6 +183,11 @@ export class TransactionPage implements OnInit, OnDestroy {
         this.updateValidators();
     }
 
+    loanSegmentChanged(ev: any) {
+        this.loanSegmentValue = ev.detail.value;
+        this.updateValidators();
+    }
+
     updateValidators() {
         const incomeSourceControl = this.transactionForm.get('incomeSource');
         const expenseTypeControl = this.transactionForm.get('expenseType');
@@ -193,9 +200,16 @@ export class TransactionPage implements OnInit, OnDestroy {
         fromWalletControl?.clearValidators();
         toWalletControl?.clearValidators();
 
-        if (this.segmentValue === 'income' || this.segmentValue === 'loan') {
+        if (this.segmentValue === 'income') {
             incomeSourceControl?.setValidators([Validators.required]);
             toWalletControl?.setValidators([Validators.required]);
+        } else if (this.segmentValue === 'loan') {
+            incomeSourceControl?.setValidators([Validators.required]);
+            if (this.loanSegmentValue === 'receive') {
+                toWalletControl?.setValidators([Validators.required]);
+            } else {
+                fromWalletControl?.setValidators([Validators.required]);
+            }
         } else if (this.segmentValue === 'expense') {
             expenseTypeControl?.setValidators([Validators.required]);
             fromWalletControl?.setValidators([Validators.required]);
@@ -270,6 +284,7 @@ export class TransactionPage implements OnInit, OnDestroy {
         if (this.transactionForm.valid) {
             console.log('Transaction Saved:', {
                 type: this.segmentValue,
+                loanType: this.segmentValue === 'loan' ? this.loanSegmentValue : null,
                 ...this.transactionForm.value,
                 image: this.capturedImage,
                 subExpenses: this.activeSubExpenses
@@ -284,11 +299,21 @@ export class TransactionPage implements OnInit, OnDestroy {
         }
     }
 
-    openCamera(event: Event) {
+    async openCamera(event: Event) {
         event.stopPropagation();
-        console.log('Camera button clicked');
-        // For now, setting a dummy image to show the design
-        this.capturedImage = 'https://placehold.co/600x400?text=Transaction+Image';
+        
+        try {
+            const image = await Camera.getPhoto({
+                quality: 90,
+                allowEditing: false,
+                resultType: CameraResultType.DataUrl,
+                source: CameraSource.Camera // Or Prompt to let user choose between camera and gallery
+            });
+
+            this.capturedImage = image.dataUrl || null;
+        } catch (error) {
+            console.error('Camera error:', error);
+        }
     }
 
     removeImage() {

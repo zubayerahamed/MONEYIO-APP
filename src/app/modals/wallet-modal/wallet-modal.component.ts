@@ -10,7 +10,6 @@ import {
     IonInput,
     IonItem,
     IonLabel,
-    IonList,
     ModalController
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';

@@ -27,13 +27,25 @@
                 <ion-label>Transfer</ion-label>
             </ion-segment-button>
         </ion-segment>
+
+        <ion-segment *ngIf="segmentValue === 'loan'" [value]="loanSegmentValue" (ionChange)="loanSegmentChanged($event)" mode="ios"
+                     class="loan-sub-segment"
+                     [class.income-theme]="loanSegmentValue === 'receive'"
+                     [class.expense-theme]="loanSegmentValue === 'pay'">
+            <ion-segment-button value="receive">
+                <ion-label>Receive</ion-label>
+            </ion-segment-button>
+            <ion-segment-button value="pay">
+                <ion-label>Pay</ion-label>
+            </ion-segment-button>
+        </ion-segment>
     </div>
 </ion-header>
 
 <ion-content [fullscreen]="true" class="ion-padding">
     <form [formGroup]="transactionForm" class="transaction-form"
-          [class.expense-mode]="segmentValue === 'expense'"
-          [class.income-mode]="segmentValue === 'income'"
+          [class.expense-mode]="segmentValue === 'expense' || (segmentValue === 'loan' && loanSegmentValue === 'pay')"
+          [class.income-mode]="segmentValue === 'income' || (segmentValue === 'loan' && loanSegmentValue === 'receive')"
           [class.loan-mode]="segmentValue === 'loan'">
         <div class="form-container">
             <!-- Date & Camera -->
@@ -46,7 +58,7 @@
                 </div>
 
                 <ion-button fill="outline" (click)="openCamera($event)" class="external-camera-btn"
-                            [color]="segmentValue === 'expense' ? 'danger' : (segmentValue === 'income' ? 'success' : (segmentValue === 'loan' ? 'warning' : 'primary'))">
+                            [color]="(segmentValue === 'expense' || (segmentValue === 'loan' && loanSegmentValue === 'pay')) ? 'danger' : ((segmentValue === 'income' || (segmentValue === 'loan' && loanSegmentValue === 'receive')) ? 'success' : 'primary')">
                     <ion-icon name="camera-outline" aria-hidden="true"></ion-icon>
                 </ion-button>
             </div>
@@ -81,8 +93,8 @@
                 </div>
             </div>
 
-            <!-- From Wallet (Expense and Transfer) -->
-            <div class="input-group" *ngIf="segmentValue === 'expense' || segmentValue === 'transfer'">
+            <!-- From Wallet (Expense, Transfer, and Loan Pay) -->
+            <div class="input-group" *ngIf="segmentValue === 'expense' || segmentValue === 'transfer' || (segmentValue === 'loan' && loanSegmentValue === 'pay')">
                 <div class="clickable-input-wrapper" (click)="openFromWalletModal()">
                     <ion-input label="From Wallet" label-placement="floating" fill="outline"
                                formControlName="fromWallet" placeholder="Select Wallet" class="custom-input" readonly>
@@ -92,8 +104,8 @@
                 </div>
             </div>
 
-            <!-- To Wallet (Income, Loan, and Transfer) -->
-            <div class="input-group" *ngIf="segmentValue === 'income' || segmentValue === 'loan' || segmentValue === 'transfer'">
+            <!-- To Wallet (Income, Transfer, and Loan Receive) -->
+            <div class="input-group" *ngIf="segmentValue === 'income' || segmentValue === 'transfer' || (segmentValue === 'loan' && loanSegmentValue === 'receive')">
                 <div class="clickable-input-wrapper" (click)="openToWalletModal()">
                     <ion-input label="To Wallet" label-placement="floating" fill="outline" formControlName="toWallet"
                                placeholder="Select Wallet" class="custom-input" readonly>

@@ -9,6 +9,11 @@
     }
 }
 
+.loan-sub-segment {
+    margin-top: 12px !important;
+    --background: rgba(var(--ion-text-color-rgb, 0, 0, 0), 0.04);
+}
+
 .grid-selection-item {
     display: flex;
     flex-direction: column;
