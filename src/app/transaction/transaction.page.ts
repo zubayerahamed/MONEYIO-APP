@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {
     IonAccordion,
     IonAccordionGroup,
@@ -12,7 +12,10 @@ import {
     IonHeader,
     IonIcon,
     IonItem,
+    IonLabel,
     IonMenuButton,
+    IonSegment,
+    IonSegmentButton,
     IonTitle,
     IonToolbar,
     ModalController
@@ -21,6 +24,8 @@ import { addIcons } from 'ionicons';
 import {
     add,
     arrowForwardOutline,
+    chevronBackOutline,
+    chevronForwardOutline,
     createOutline,
     documentTextOutline,
     imageOutline,
@@ -30,7 +35,8 @@ import {
     swapHorizontalOutline,
     trashOutline,
     trendingDownOutline,
-    trendingUpOutline
+    trendingUpOutline,
+    walletOutline
 } from 'ionicons/icons';
 import { TransactionModalComponent } from '../modals/transaction-modal/transaction-modal.component';
 
@@ -54,12 +60,18 @@ import { TransactionModalComponent } from '../modals/transaction-modal/transacti
         IonAccordion,
         IonAccordionGroup,
         IonButton,
-        IonItem
+        IonItem,
+        IonSegment,
+        IonSegmentButton,
+        IonLabel
     ],
 })
-export class TransactionPage {
+export class TransactionPage implements OnInit {
     transactions: any[] = [];
     groupedTransactions: { date: string, income: number, expense: number, items: any[] }[] = [];
+    
+    segmentValue: string = 'monthly';
+    currentDate: Date = new Date();
 
     constructor(private modalCtrl: ModalController) {
         addIcons({
@@ -74,8 +86,47 @@ export class TransactionPage {
             imageOutline,
             documentTextOutline,
             arrowForwardOutline,
-            listOutline
+            listOutline,
+            chevronBackOutline,
+            chevronForwardOutline,
+            walletOutline
         });
+
+        // Initialize with some mock data for better visualization
+        const now = new Date();
+        this.transactions = [
+            {
+                date: now.toISOString(),
+                amount: '1200.00',
+                type: 'income',
+                incomeSource: 'Salary',
+                toWallet: 'Bank',
+                note: 'Monthly salary credit'
+            },
+            {
+                date: now.toISOString(),
+                amount: '45.50',
+                type: 'expense',
+                expenseType: 'Food',
+                fromWallet: 'Cash',
+                subExpenses: [
+                    { name: 'Lunch', amount: 30.00 },
+                    { name: 'Coffee', amount: 15.50 }
+                ]
+            },
+            {
+                date: now.toISOString(),
+                amount: '500.00',
+                type: 'transfer',
+                fromWallet: 'Bank',
+                toWallet: 'Cash',
+                note: 'ATM Withdrawal'
+            }
+        ];
+    }
+
+    ngOnInit() {
+        this.groupTransactions();
     }
 
     async openTransactionModal(initialSegment: string) {
@@ -94,10 +145,55 @@ export class TransactionPage {
         }
     }
 
+    segmentChanged(ev: any) {
+        this.segmentValue = ev.detail.value;
+        this.groupTransactions();
+    }
+
+    get dateDisplay(): string {
+        if (this.segmentValue === 'monthly') {
+            return this.currentDate.toLocaleString('default', { month: 'long', year: 'numeric' });
+        } else {
+            return this.currentDate.getFullYear().toString();
+        }
+    }
+
+    prev() {
+        const newDate = new Date(this.currentDate);
+        if (this.segmentValue === 'monthly') {
+            newDate.setMonth(newDate.getMonth() - 1);
+        } else {
+            newDate.setFullYear(newDate.getFullYear() - 1);
+        }
+        this.currentDate = newDate;
+        this.groupTransactions();
+    }
+
+    next() {
+        const newDate = new Date(this.currentDate);
+        if (this.segmentValue === 'monthly') {
+            newDate.setMonth(newDate.getMonth() + 1);
+        } else {
+            newDate.setFullYear(newDate.getFullYear() + 1);
+        }
+        this.currentDate = newDate;
+        this.groupTransactions();
+    }
+
     groupTransactions() {
         const groups: { [key: string]: { income: number, expense: number, items: any[] } } = {};
 
-        this.transactions.forEach(t => {
+        const filteredTransactions = this.transactions.filter(t => {
+            const tDate = new Date(t.date);
+            if (this.segmentValue === 'monthly') {
+                return tDate.getMonth() === this.currentDate.getMonth() && 
+                       tDate.getFullYear() === this.currentDate.getFullYear();
+            } else {
+                return tDate.getFullYear() === this.currentDate.getFullYear();
+            }
+        });
+
+        filteredTransactions.forEach(t => {
             const date = t.date.split('T')[0];
             if (!groups[date]) {
                 groups[date] = { income: 0, expense: 0, items: [] };

@@ -1,3 +1,46 @@
+.navigation-toolbar {
+  --background: transparent;
+  
+  .navigation-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 16px;
+    height: 48px;
+
+    .current-date {
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: var(--ion-color-dark);
+      flex: 1;
+      text-align: center;
+    }
+
+    ion-button {
+      --padding-start: 8px;
+      --padding-end: 8px;
+      margin: 0;
+      
+      ion-icon {
+        font-size: 1.5rem;
+      }
+    }
+  }
+}
+
+ion-segment {
+  --background: transparent;
+  padding: 0 16px;
+  
+  ion-segment-button {
+    --indicator-color: var(--ion-color-primary);
+    --color: var(--ion-color-medium);
+    --color-checked: var(--ion-color-primary);
+    font-weight: 600;
+    min-height: 45px;
+  }
+}
+
 :root {
   --ion-background-color: #ffffff;
   --compact-border: 1px solid #f0f0f0;
